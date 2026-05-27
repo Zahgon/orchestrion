@@ -6,44 +6,13 @@
 package main
 
 import (
-	"context"
-	"log"
-
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func AWSClientV2() {
-	cfg := newCfg1()
+func AWSClientV2() { _ = "STUB: not implemented"; return }
 
-	s3api := s3.NewFromConfig(cfg)
-	res, err := s3api.CreateBucket(context.Background(), &s3.CreateBucketInput{
-		Bucket: aws.String("shiny-bucket"),
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("got response: %v\n", res)
-}
+func newCfg1() aws.Config { _ = "STUB: not implemented"; return *new(aws.Config) }
 
-func newCfg1() aws.Config {
-	cfg := aws.NewConfig()
-	return *cfg
-}
+func newCfg2() aws.Config { _ = "STUB: not implemented"; return *new(aws.Config) }
 
-func newCfg2() aws.Config {
-	cfg := &aws.Config{
-		Region:       "test-region-1337",
-		Credentials:  aws.AnonymousCredentials{},
-		BaseEndpoint: aws.String("http://localhost:4566"),
-	}
-	return *cfg
-}
-
-func newCfg3() aws.Config {
-	return aws.Config{
-		Region:       "test-region-1337",
-		Credentials:  aws.AnonymousCredentials{},
-		BaseEndpoint: aws.String("http://localhost:4566"),
-	}
-}
+func newCfg3() aws.Config { _ = "STUB: not implemented"; return *new(aws.Config) }

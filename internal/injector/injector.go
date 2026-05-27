@@ -10,25 +10,15 @@ package injector
 
 import (
 	gocontext "context"
-	"errors"
-	"fmt"
 	"go/importer"
-	"go/token"
 	"go/types"
-	"sync"
 
-	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/DataDog/orchestrion/internal/injector/aspect"
-	"github.com/DataDog/orchestrion/internal/injector/aspect/advice"
 	"github.com/DataDog/orchestrion/internal/injector/aspect/context"
-	"github.com/DataDog/orchestrion/internal/injector/parse"
 	"github.com/DataDog/orchestrion/internal/injector/typed"
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 	"github.com/dave/dst/decorator/resolver"
-	"github.com/dave/dst/decorator/resolver/gotypes"
-	"github.com/dave/dst/dstutil"
-	"github.com/rs/zerolog"
 )
 
 type (
@@ -86,233 +76,39 @@ type (
 // the receiving Injector. The method returns a map that associates the original source file path to the modified file
 // information. It does not contain entries for unmodified files.
 func (i *Injector) InjectFiles(ctx gocontext.Context, files []string, aspects []*aspect.Aspect) (_ map[string]InjectedFile, _ context.GoLangVersion, err error) {
-	span, ctx := tracer.StartSpanFromContext(ctx, "InjectFiles",
-		tracer.ServiceName("github.com/DataDog/orchestrion/internal/injector"),
-		tracer.ResourceName(i.ImportPath),
-	)
-	defer func() { span.Finish(tracer.WithError(err)) }()
-
-	if err := i.validate(); err != nil {
-		return nil, context.GoLangVersion{}, err
-	}
-
-	log := zerolog.Ctx(ctx)
-	aspects = i.packageFilterAspects(aspects)
-
-	fset := token.NewFileSet()
-	parser := parse.NewParser(fset, len(files))
-	parsedFiles, err := parser.ParseFiles(ctx, files, aspects)
-	if err != nil {
-		return nil, context.GoLangVersion{}, err
-	}
-
-	if len(parsedFiles) == 0 {
-		log.Debug().Str("import-path", i.ImportPath).Msg("No files to inject in package after filtering on imports and files")
-		return nil, context.GoLangVersion{}, nil
-	}
-
-	typeInfo, err := i.typeCheck(ctx, fset, parsedFiles)
-	if errors.Is(err, typeCheckingError{}) {
-		// We don't want to fail here on type-checking errors... Instead do nothing and let the standard
-		// go compiler/toolchain surface the error to the user in a canonical way.
-		log.Warn().Str("import-path", i.ImportPath).Err(err).Msg("Skipping injectrion due to type checking error")
-		return nil, context.GoLangVersion{}, nil
-	} else if err != nil {
-		return nil, context.GoLangVersion{}, err
-	}
-
-	var (
-		wg           sync.WaitGroup
-		errs         []error
-		errsMu       sync.Mutex
-		result       = make(map[string]InjectedFile, len(parsedFiles))
-		resultGoLang context.GoLangVersion
-		resultMu     sync.Mutex
-	)
-
-	wg.Add(len(parsedFiles))
-	for _, parsedFile := range parsedFiles {
-		go func(parsedFile parse.File) {
-			defer wg.Done()
-
-			decorator := decorator.NewDecoratorWithImports(fset, i.ImportPath, gotypes.New(typeInfo.Uses))
-			dstFile, err := decorator.DecorateFile(parsedFile.AstFile)
-			if err != nil {
-				errsMu.Lock()
-				defer errsMu.Unlock()
-				errs = append(errs, err)
-				return
-			}
-
-			res, err := i.injectFile(ctx, decorator, dstFile, typeInfo, parsedFile.Aspects)
-			if err != nil {
-				errsMu.Lock()
-				defer errsMu.Unlock()
-				errs = append(errs, err)
-				return
-			}
-
-			if !res.Modified {
-				return
-			}
-
-			resultMu.Lock()
-			defer resultMu.Unlock()
-			result[parsedFile.Name] = res.InjectedFile
-			resultGoLang.SetAtLeast(res.GoLang)
-		}(parsedFile)
-	}
-	wg.Wait()
-
-	return result, resultGoLang, errors.Join(errs...)
+	_ = "STUB: not implemented"
+	return nil, *new(context.GoLangVersion), nil
 }
 
-func (i *Injector) validate() error {
-	var err error
-	if i.ImportPath == "" {
-		err = errors.Join(err, fmt.Errorf("invalid %T: missing ImportPath", i))
-	}
-	if i.Lookup == nil {
-		err = errors.Join(err, fmt.Errorf("invalid %T: missing Lookup", i))
-	}
+// We don't want to fail here on type-checking errors... Instead do nothing and let the standard
+// go compiler/toolchain surface the error to the user in a canonical way.
 
-	// Initialize the restorerResolver field, too...
-	i.restorerResolver = &lookupResolver{lookup: i.Lookup}
+func (i *Injector) validate() error { _ = "STUB: not implemented"; return nil }
 
-	return err
-}
+// Initialize the restorerResolver field, too...
 
 // injectFile injects code in the specified file. This method can be called concurrently by multiple goroutines,
 // as is guarded by a sync.Mutex.
 func (i *Injector) injectFile(ctx gocontext.Context, decorator *decorator.Decorator, file *dst.File, typeInfo types.Info, aspects []*aspect.Aspect) (result, error) {
-	span, ctx := tracer.StartSpanFromContext(ctx, "Injector.injectFile",
-		tracer.ResourceName(decorator.Filenames[file]),
-	)
-	defer span.Finish()
-
-	result, err := i.applyAspects(ctx, parameters{
-		Decorator: decorator,
-		File:      file,
-		TypeInfo:  typeInfo,
-		Aspects:   aspects,
-	})
-	if err != nil {
-		return result, fmt.Errorf("%q: %w", result.Filename, err)
-	}
-
-	if result.Modified {
-		span.SetTag("modified", true)
-
-		result.Filename, err = i.writeModifiedFile(ctx, decorator, file)
-		if err != nil {
-			return result, err
-		}
-	}
-
-	return result, nil
+	_ = "STUB: not implemented"
+	return *new(result), nil
 }
 
 func (i *Injector) applyAspects(ctx gocontext.Context, params parameters) (result, error) {
-	var (
-		chain      *context.NodeChain
-		modified   bool
-		references = typed.NewReferenceMap(params.Decorator.Ast.Nodes, params.TypeInfo.Scopes)
-		err        error
-	)
-
-	pre := func(csor *dstutil.Cursor) bool {
-		if err != nil || csor.Node() == nil || isIgnored(ctx, csor.Node()) {
-			return false
-		}
-
-		root := chain == nil
-		chain = chain.Child(csor)
-		if root {
-			chain.SetConfig(i.RootConfig)
-		}
-		return true
-	}
-
-	var minGoLang context.GoLangVersion
-	post := func(csor *dstutil.Cursor) bool {
-		// Pop the ancestry stack now that we're done with this node.
-		defer func() {
-			old := chain
-			chain = chain.Parent()
-			old.Release()
-		}()
-
-		var changed bool
-		ctx := chain.Context(ctx, context.ContextArgs{
-			Cursor:       csor,
-			ImportPath:   params.Decorator.Path,
-			File:         params.File,
-			RefMap:       &references,
-			SourceParser: params.Decorator,
-			MinGoLang:    &minGoLang,
-			TestMain:     i.TestMain,
-			TypeInfo:     params.TypeInfo,
-			NodeMap:      params.Decorator.Ast.Nodes,
-		})
-		defer ctx.Release()
-
-		changed, err = injectNode(ctx, params.Aspects)
-		modified = modified || changed
-
-		return err == nil
-	}
-
-	dstutil.Apply(params.File, pre, post)
-	if err != nil {
-		return result{}, err
-	}
-
-	// We only inject synthetic imports here because it may offset declarations by one position in
-	// case a new import declaration is necessary, which causes dstutil.Apply to re-traverse the
-	// current declaration.
-	if references.AddSyntheticImports(params.File) {
-		modified = true
-	}
-
-	return result{
-		InjectedFile: InjectedFile{
-			References: references,
-			Filename:   params.Decorator.Filenames[params.File],
-		},
-		Modified: modified,
-		GoLang:   minGoLang,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(result), nil
 }
+
+// Pop the ancestry stack now that we're done with this node.
+
+// We only inject synthetic imports here because it may offset declarations by one position in
+// case a new import declaration is necessary, which causes dstutil.Apply to re-traverse the
+// current declaration.
 
 // injectNode assesses all configured aspects against the current node, and performs any AST
 // transformations. It returns whether the AST was indeed modified. In case of an error, the
 // injector aborts immediately and returns the error.
 func injectNode(ctx context.AdviceContext, aspects []*aspect.Aspect) (mod bool, err error) {
-	var orderedAdvice []*advice.OrderedAdvice
-	var index int
-	for _, inj := range aspects {
-		if !inj.JoinPoint.Matches(ctx) {
-			continue
-		}
-
-		for _, adv := range inj.Advice {
-			orderedAdvice = append(orderedAdvice, advice.NewOrderedAdvice(inj.ID, adv, index))
-			index++
-		}
-	}
-
-	if len(orderedAdvice) == 0 {
-		return false, nil
-	}
-
-	advice.Sort(orderedAdvice)
-	for _, act := range orderedAdvice {
-		var changed bool
-		changed, err := act.Apply(ctx)
-		mod = mod || changed
-		if err != nil {
-			return mod, fmt.Errorf("%q[%d]: %w", act.AspectID, act.Index, err)
-		}
-	}
-	return mod, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }

@@ -17,63 +17,27 @@ import (
 
 type oneOf []Point
 
-func OneOf(candidates ...Point) oneOf {
-	return candidates
-}
+func OneOf(candidates ...Point) oneOf { _ = "STUB: not implemented"; return *new(oneOf) }
 
 func (o oneOf) ImpliesImported() []string {
+	_ = "STUB: not implemented"
 	// We can only assume a package is imported if all candidates imply it.
-	counts := make(map[string]uint)
-	for _, jp := range o {
-		for _, path := range jp.ImpliesImported() {
-			counts[path]++
-		}
-	}
-
-	total := uint(len(o))
-	list := make([]string, 0, len(counts))
-	for path, count := range counts {
-		if count == total {
-			list = append(list, path)
-		}
-	}
-	return list
+	return nil
 }
 
 func (o oneOf) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	sum := may.NeverMatch
-	for _, candidate := range o {
-		sum = sum.Or(candidate.PackageMayMatch(ctx))
-		if sum == may.Match {
-			return may.Match
-		}
-	}
-	return sum
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (o oneOf) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	sum := may.NeverMatch
-	for _, candidate := range o {
-		sum = sum.Or(candidate.FileMayMatch(ctx))
-		if sum == may.Match {
-			return may.Match
-		}
-	}
-	return sum
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
-func (o oneOf) Matches(ctx context.AspectContext) bool {
-	for _, candidate := range o {
-		if candidate.Matches(ctx) {
-			return true
-		}
-	}
-	return false
-}
+func (o oneOf) Matches(ctx context.AspectContext) bool { _ = "STUB: not implemented"; return false }
 
-func (o oneOf) Hash(h *fingerprint.Hasher) error {
-	return h.Named("one-of", fingerprint.List[Point](o))
-}
+func (o oneOf) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	unmarshalers["one-of"] = func(ctx gocontext.Context, node ast.Node) (Point, error) {

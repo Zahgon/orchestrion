@@ -5,25 +5,6 @@
 
 package main
 
-import "github.com/Shopify/sarama"
+func shopifySaramaConsumer() { _ = "STUB: not implemented"; return }
 
-func shopifySaramaConsumer() {
-	cfg := sarama.NewConfig()
-	consumer, err := sarama.NewConsumer([]string{"localhost:9092"}, cfg)
-	if err != nil {
-		panic(err)
-	}
-	defer consumer.Close()
-}
-
-func shopifySaramaConsumerFromClient() {
-	client, err := sarama.NewClient([]string{"localhost:9092"}, nil)
-	if err != nil {
-		panic(err)
-	}
-	consumer, err := sarama.NewConsumerFromClient(client)
-	if err != nil {
-		panic(err)
-	}
-	defer consumer.Close()
-}
+func shopifySaramaConsumerFromClient() { _ = "STUB: not implemented"; return }

@@ -26,47 +26,15 @@ type (
 var _ dst.Visitor = (*canonicalizationVisitor)(nil)
 
 func (v *canonicalizationVisitor) Visit(node dst.Node) dst.Visitor {
-	if node == nil {
-		v.stack = v.stack[:len(v.stack)-1]
-		return nil
-	}
-
-	v.stack = append(v.stack, &stackEntry{node: node})
-	var parent *stackEntry
-	if len := len(v.stack); len > 1 {
-		parent = v.stack[len-2]
-		// Upon returning, set the parent's last visited child to the current one...
-		defer func() { parent.lastChild = node }()
-	}
-
-	// dave/dst will double-count new lines between imports if an ImportSpec with "After" spacing set
-	// to `dst.EmptyLine` is immediately followed by another with "Before" spacing of `dst.EmptyLine`.
-	// The two empty lines are  satisfied by the same; so we can safely turn either one into a
-	// `dst.NewLine` instead, so we get accurate line numbering data from the restorer.
-	if node.Decorations().Before == dst.EmptyLine &&
-		parent != nil && parent.lastChild != nil && parent.lastChild.Decorations().After == dst.EmptyLine {
-		parent.lastChild.Decorations().After = dst.NewLine
-	}
-
-	if node, isGenDecl := node.(*dst.GenDecl); isGenDecl {
-		if node.Decs.Before == dst.None {
-			node.Decs.Before = dst.NewLine
-		}
-		return v
-	}
-
-	if node.Decorations().Before != dst.None {
-		return v
-	}
-	if _, isStmt := node.(dst.Stmt); !isStmt {
-		return v
-	}
-
-	// Don't space up the statements if they're not within a *dst.Block, or if the block contains exactly 1 statement.
-	if block, isBlock := parent.node.(*dst.BlockStmt); !isBlock || len(block.List) == 1 {
-		return v
-	}
-
-	node.Decorations().Before = dst.NewLine
-	return v
+	_ = "STUB: not implemented"
+	return *new(dst.Visitor)
 }
+
+// Upon returning, set the parent's last visited child to the current one...
+
+// dave/dst will double-count new lines between imports if an ImportSpec with "After" spacing set
+// to `dst.EmptyLine` is immediately followed by another with "Before" spacing of `dst.EmptyLine`.
+// The two empty lines are  satisfied by the same; so we can safely turn either one into a
+// `dst.NewLine` instead, so we get accurate line numbering data from the restorer.
+
+// Don't space up the statements if they're not within a *dst.Block, or if the block contains exactly 1 statement.

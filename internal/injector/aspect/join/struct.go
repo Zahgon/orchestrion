@@ -8,7 +8,6 @@ package join
 import (
 	gocontext "context"
 	"fmt"
-	"go/token"
 
 	"github.com/DataDog/orchestrion/internal/fingerprint"
 	"github.com/DataDog/orchestrion/internal/injector/aspect/context"
@@ -25,51 +24,30 @@ type structDefinition struct {
 
 // StructDefinition matches the definition of a particular struct given its fully qualified name.
 func StructDefinition(typeName typed.TypeName) *structDefinition {
-	return &structDefinition{
-		TypeName: typeName,
-	}
-}
-
-func (s *structDefinition) ImpliesImported() []string {
-	if path := s.TypeName.ImportPath; path != "" {
-		return []string{path}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (s *structDefinition) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	if ctx.ImportPath == s.TypeName.ImportPath {
-		return may.Match
-	}
+func (s *structDefinition) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
 
-	return may.NeverMatch
+func (s *structDefinition) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (*structDefinition) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	return ctx.FileContains("struct")
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (s *structDefinition) Matches(ctx context.AspectContext) bool {
-	if s.TypeName.Pointer {
-		// We can't ever match a pointer definition
-		return false
-	}
+	_ = "STUB: not implemented"
+	return false
 
-	spec, ok := ctx.Node().(*dst.TypeSpec)
-	if !ok || spec.Name == nil || spec.Name.Name != s.TypeName.Name {
-		return false
-	}
-
-	if _, ok := spec.Type.(*dst.StructType); !ok {
-		return false
-	}
-
-	return ctx.ImportPath() == s.TypeName.ImportPath
+	// We can't ever match a pointer definition
 }
 
-func (s *structDefinition) Hash(h *fingerprint.Hasher) error {
-	return h.Named("struct-definition", s.TypeName)
-}
+func (s *structDefinition) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 type (
 	StructLiteralMatch int
@@ -95,89 +73,42 @@ const (
 
 // StructLiteralField matches a specific field in struct literals of the designated type.
 func StructLiteralField(typeName typed.TypeName, field string) *structLiteral {
-	return &structLiteral{
-		TypeName: typeName,
-		Field:    field,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // StructLiteral matches struct literal expressions of the designated type, filtered by the
 // specified match type.
 func StructLiteral(typeName typed.TypeName, match StructLiteralMatch) *structLiteral {
-	return &structLiteral{
-		TypeName: typeName,
-		Match:    match,
-	}
-}
-
-func (s *structLiteral) ImpliesImported() []string {
-	if path := s.TypeName.ImportPath; path != "" {
-		return []string{path}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+func (s *structLiteral) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
+
 func (s *structLiteral) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	return ctx.PackageImports(s.TypeName.ImportPath)
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (*structLiteral) FileMayMatch(_ *may.FileContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (s *structLiteral) Matches(ctx context.AspectContext) bool {
-	if s.Field == "" {
-		switch s.Match {
-		case StructLiteralMatchPointerOnly:
-			// match only if the current node is equal to & and the underlying node matches
-			// the struct literal we are looking for
-			if expr, ok := ctx.Node().(*dst.UnaryExpr); ok && expr.Op == token.AND {
-				return s.matchesLiteral(expr.X)
-			}
-			return false
-
-		case StructLiteralMatchValueOnly:
-			// do not match if the parent is equal to &
-			if parent := ctx.Chain().Parent(); parent != nil {
-				if expr, ok := parent.Node().(*dst.UnaryExpr); ok && expr.Op == token.AND {
-					return false
-				}
-			}
-			return s.matchesLiteral(ctx.Node())
-
-		default:
-			return s.matchesLiteral(ctx.Node())
-		}
-	}
-
-	kve, ok := ctx.Node().(*dst.KeyValueExpr)
-	if !ok {
-		return false
-	}
-
-	if parent := ctx.Chain().Parent(); parent == nil || !s.matchesLiteral(parent.Node()) {
-		return false
-	}
-
-	key, ok := kve.Key.(*dst.Ident)
-	if !ok {
-		return false
-	}
-
-	return key.Name == s.Field
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (s *structLiteral) matchesLiteral(node dst.Node) bool {
-	lit, ok := node.(*dst.CompositeLit)
-	if !ok {
-		return false
-	}
-	return s.TypeName.Matches(lit.Type)
-}
+// match only if the current node is equal to & and the underlying node matches
+// the struct literal we are looking for
 
-func (s *structLiteral) Hash(h *fingerprint.Hasher) error {
-	return h.Named("struct-literal", s.TypeName, fingerprint.String(s.Field), s.Match)
-}
+// do not match if the parent is equal to &
+
+func (s *structLiteral) matchesLiteral(node dst.Node) bool { _ = "STUB: not implemented"; return false }
+
+func (s *structLiteral) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	unmarshalers["struct-definition"] = func(ctx gocontext.Context, node ast.Node) (Point, error) {
@@ -225,38 +156,13 @@ func init() {
 var _ yaml.NodeUnmarshalerContext = (*StructLiteralMatch)(nil)
 
 func (s *StructLiteralMatch) UnmarshalYAML(ctx gocontext.Context, node ast.Node) error {
-	var name string
-	if err := yaml.NodeToValueContext(ctx, node, &name); err != nil {
-		return err
-	}
-
-	switch name {
-	case "any":
-		*s = StructLiteralMatchAny
-	case "value-only":
-		*s = StructLiteralMatchValueOnly
-	case "pointer-only":
-		*s = StructLiteralMatchPointerOnly
-	default:
-		return fmt.Errorf("invalid struct-literal.match value: %q", name)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (s StructLiteralMatch) String() string {
-	switch s {
-	case StructLiteralMatchAny:
-		return "any"
-	case StructLiteralMatchValueOnly:
-		return "value-only"
-	case StructLiteralMatchPointerOnly:
-		return "pointer-only"
-	default:
-		panic(fmt.Errorf("invalid StructLiteralMatch(%d)", int(s)))
-	}
-}
+func (s StructLiteralMatch) String() string { _ = "STUB: not implemented"; return "" }
 
 func (s StructLiteralMatch) Hash(h *fingerprint.Hasher) error {
-	return h.Named("struct-literal-match", fingerprint.Int(s))
+	_ = "STUB: not implemented"
+	return nil
 }

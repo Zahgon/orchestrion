@@ -5,12 +5,6 @@
 
 package advice
 
-import (
-	"cmp"
-	"slices"
-	"strings"
-)
-
 const (
 	// DefaultNamespace is used when no namespace is specified.
 	// Uses the highest Unicode code point to ensure default advice
@@ -36,36 +30,13 @@ type OrderedAdvice struct {
 
 // NewOrderedAdvice creates a new OrderedAdvice with default values
 func NewOrderedAdvice(aspectID string, advice Advice, index int) *OrderedAdvice {
-	orderedAdvice := &OrderedAdvice{
-		AspectID: aspectID,
-		Advice:   advice,
-		Index:    index,
-	}
-	if orderableAdv, ok := advice.(OrderableAdvice); ok {
-		orderedAdvice.order = orderableAdv.Order()
-		orderedAdvice.namespace = orderableAdv.Namespace()
-	} else {
-		orderedAdvice.order = DefaultOrder
-		orderedAdvice.namespace = DefaultNamespace
-	}
-	return orderedAdvice
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Sort sorts advice from multiple aspects and returns them in execution order.
 // It handles both orderable and non-orderable advice, providing deterministic sorting
 // based on namespace, order, and original definition order.
-func Sort(orderedAdvice []*OrderedAdvice) {
-	slices.SortStableFunc(orderedAdvice, adviceSorter)
-}
+func Sort(orderedAdvice []*OrderedAdvice) { _ = "STUB: not implemented"; return }
 
-func adviceSorter(a *OrderedAdvice, b *OrderedAdvice) int {
-	if n := strings.Compare(a.namespace, b.namespace); n != 0 {
-		return n
-	}
-
-	if n := cmp.Compare(a.order, b.order); n != 0 {
-		return n
-	}
-
-	return cmp.Compare(a.Index, b.Index)
-}
+func adviceSorter(a *OrderedAdvice, b *OrderedAdvice) int { _ = "STUB: not implemented"; return 0 }

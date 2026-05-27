@@ -24,28 +24,14 @@ type (
 
 // Visit calls the visitor for each configuration found in the specified root
 // [Config].
-func Visit(cfg Config, visitor Visitor) error {
-	return cfg.visit(visitor, "")
-}
+func Visit(cfg Config, visitor Visitor) error { _ = "STUB: not implemented"; return nil }
 
-func (c *configYML) Name() string {
-	return c.meta.name
-}
+func (c *configYML) Name() string { _ = "STUB: not implemented"; return "" }
 
-func (c *configYML) Description() string {
-	return c.meta.description
-}
+func (c *configYML) Description() string { _ = "STUB: not implemented"; return "" }
 
-func (c *configYML) Caveats() string {
-	return c.meta.caveats
-}
+func (c *configYML) Caveats() string { _ = "STUB: not implemented"; return "" }
 
-func (c *configYML) Icon() string {
-	return c.meta.icon
-}
+func (c *configYML) Icon() string { _ = "STUB: not implemented"; return "" }
 
-func (c *configYML) OwnAspects() []*aspect.Aspect {
-	res := make([]*aspect.Aspect, len(c.aspects))
-	copy(res, c.aspects)
-	return res
-}
+func (c *configYML) OwnAspects() []*aspect.Aspect { _ = "STUB: not implemented"; return nil }

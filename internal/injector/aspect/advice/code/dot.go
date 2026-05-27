@@ -6,10 +6,7 @@
 package code
 
 import (
-	"fmt"
-
 	"github.com/dave/dst"
-	"github.com/dave/dst/dstutil"
 
 	"github.com/DataDog/orchestrion/internal/injector/aspect/context"
 )
@@ -28,66 +25,21 @@ type (
 	}
 )
 
-func (d *dot) String() string {
-	return d.placeholders.forNode(d.context.Node(), true)
-}
+func (d *dot) String() string { _ = "STUB: not implemented"; return "" }
 
 // forNode obtains the placeholder syntax to use for referencing the given node. If singleton is
 // true, this returns the same placeholder for each invocation with the same node argument.
 // Otherwise, this returns a new placeholder for each invocation, guaranteeing that different AST
 // nodes are produced (it's an error to have the same AST node multiple times in the output AST).
 func (p *placeholders) forNode(node dst.Node, singleton bool) string {
-	if singleton {
-		if name, found := p.singletons[node]; found {
-			return name
-		}
-		if p.singletons == nil {
-			// Will be filled in later once we have determined the name
-			p.singletons = make(map[dst.Node]string, 1)
-		}
-	}
-
-	name := fmt.Sprintf("__PLACEHOLDER_%d__", len(p.byName))
-	if p.byName == nil {
-		p.byName = make(map[string]dst.Node, 1)
-	}
-	if singleton {
-		p.byName[name] = node
-		p.singletons[node] = name
-	} else {
-		p.byName[name], _ = dst.Clone(node).(dst.Expr)
-	}
-
-	return "_." + name
+	_ = "STUB: not implemented"
+	return ""
 }
+
+// Will be filled in later once we have determined the name
 
 // replaceAllIn replaces all placeholders found in the given AST with the actual dst.Expr value.
 func (p *placeholders) replaceAllIn(ast dst.Node) dst.Node {
-	if len(p.byName) == 0 {
-		return ast
-	}
-
-	return dstutil.Apply(
-		ast,
-		func(csor *dstutil.Cursor) bool {
-			selectorExpr, ok := csor.Node().(*dst.SelectorExpr)
-			if !ok {
-				return true
-			}
-
-			repl, found := p.byName[selectorExpr.Sel.Name]
-			if !found {
-				return true
-			}
-
-			if ident, ok := selectorExpr.X.(*dst.Ident); !ok || ident.Name != "_" {
-				return true
-			}
-
-			csor.Replace(repl)
-
-			return false
-		},
-		nil,
-	)
+	_ = "STUB: not implemented"
+	return *new(dst.Node)
 }

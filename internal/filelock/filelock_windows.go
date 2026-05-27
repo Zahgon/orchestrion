@@ -10,8 +10,6 @@ package filelock
 import (
 	"context"
 	"os"
-
-	"golang.org/x/sys/windows"
 )
 
 const (
@@ -20,25 +18,15 @@ const (
 )
 
 // rlock places an advisory shared lock on the specified file.
-func rlock(f *os.File) error {
-	return winLock(f, 0)
-}
+func rlock(f *os.File) error { _ = "STUB: not implemented"; return nil }
 
 // lock places an advisory exclusive lock on the specified file.
-func lock(f *os.File) error {
-	return winLock(f, windows.LOCKFILE_EXCLUSIVE_LOCK)
-}
+func lock(f *os.File) error { _ = "STUB: not implemented"; return nil }
 
-func winLock(f *os.File, lockType uint32) error {
-	var overlapped windows.Overlapped
-	return windows.LockFileEx(windows.Handle(f.Fd()), lockType, reserved, allBytes, allBytes, &overlapped)
-}
+func winLock(f *os.File, lockType uint32) error { _ = "STUB: not implemented"; return nil }
 
 // unlock removes any advisory locks from the specified file.
-func unlock(f *os.File) error {
-	var overlapped windows.Overlapped
-	return windows.UnlockFileEx(windows.Handle(f.Fd()), reserved, allBytes, allBytes, &overlapped)
-}
+func unlock(f *os.File) error { _ = "STUB: not implemented"; return nil }
 
 // beforeLockChange is called before the lock state is changed. On Windows, one
 // must release the lock before changing it, as attempting to lock an
@@ -46,19 +34,12 @@ func unlock(f *os.File) error {
 // process) will block indefinitely. It returns `false` if the desired lock is
 // the currently held lock (idempotent success).
 func (m *Mutex) beforeLockChange(ctx context.Context, to lockState) (cont bool, err error) {
-	if m.locked == lockStateUnlocked {
-		// No-op, the file is not currently locked by this process.
-		return true, nil
-	}
-	if m.locked == to {
-		// No-op, the currently held lock is already the expected lock type.
-		return false, nil
-	}
-
-	// We need to unlock before acquiring the new lock.
-	if err := m.unlock(ctx); err != nil {
-		return false, err
-	}
-
-	return true, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }
+
+// No-op, the file is not currently locked by this process.
+
+// No-op, the currently held lock is already the expected lock type.
+
+// We need to unlock before acquiring the new lock.

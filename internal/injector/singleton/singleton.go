@@ -7,22 +7,11 @@ package singleton
 
 import (
 	"context"
-	"errors"
 
-	"github.com/DataDog/orchestrion/internal/yaml"
 	"github.com/goccy/go-yaml/ast"
 )
 
 func Unmarshal(ctx context.Context, node ast.Node) (key string, value ast.Node, err error) {
-	mapping, ok := node.(*ast.MappingNode)
-	if !ok || len(mapping.Values) != 1 {
-		err = errors.New("not a singleton mapping")
-		return "", nil, err
-	}
-
-	if err = yaml.NodeToValueContext(ctx, mapping.Values[0].Key, &key); err != nil {
-		return "", nil, err
-	}
-
-	return key, mapping.Values[0].Value, nil
+	_ = "STUB: not implemented"
+	return "", *new(ast.Node), nil
 }

@@ -6,10 +6,7 @@
 package typed
 
 import (
-	"fmt"
-	"go/importer"
 	"go/types"
-	"strings"
 
 	"github.com/dave/dst"
 )
@@ -22,75 +19,45 @@ type TypeResolver interface {
 // ExprImplements checks if the type of a dst.Expr, resolved using the provider,
 // implements the given interface.
 func ExprImplements(resolver TypeResolver, expr dst.Expr, iface *types.Interface) bool {
-	actualType := resolver.ResolveType(expr)
-	if actualType == nil {
-		return false
-	}
-	return typeImplements(actualType, iface)
+	_ = "STUB: not implemented"
+	return false
 }
 
 // typeImplements checks if a type implements an interface.
 func typeImplements(t types.Type, iface *types.Interface) bool {
-	if t == nil || iface == nil {
-		return false
-	}
-
-	// Direct implementation check.
-	if types.Implements(t, iface) {
-		return true
-	}
-
-	// Fallback: check by method name only. types.Implements can fail when
-	// ResolveInterfaceTypeByName (importer.Default) and the type checker
-	// (importer.ForCompiler) produce different *types.Package objects for the
-	// same path, causing types.Identical to reject named types in method
-	// signatures (e.g., time.Time in context.Context.Deadline).
-	// types.LookupFieldOrMethod compares by package path, not pointer, so it
-	// correctly finds matching methods across importers.
-	for i := 0; i < iface.NumMethods(); i++ {
-		m := iface.Method(i)
-		obj, _, _ := types.LookupFieldOrMethod(t, false, m.Pkg(), m.Name())
-		if _, isFunc := obj.(*types.Func); !isFunc {
-			return false
-		}
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
+// Direct implementation check.
+
+// Fallback: check by method name only. types.Implements can fail when
+// ResolveInterfaceTypeByName (importer.Default) and the type checker
+// (importer.ForCompiler) produce different *types.Package objects for the
+// same path, causing types.Identical to reject named types in method
+// signatures (e.g., time.Time in context.Context.Deadline).
+// types.LookupFieldOrMethod compares by package path, not pointer, so it
+// correctly finds matching methods across importers.
 
 // ResolveInterfaceTypeByName takes an interface name as a string and resolves it to an interface type.
 func ResolveInterfaceTypeByName(name string) (*types.Interface, error) {
-	pkgPath, typeName := SplitPackageAndName(name)
-
-	if pkgPath == "" {
-		// Handle built-in types or unqualified names.
-		scope := types.Universe
-		obj := scope.Lookup(typeName)
-		if obj == nil {
-			// Not found in universe scope.
-			return nil, fmt.Errorf("interface %q not found (not a built-in or unqualified)", typeName)
-		}
-		// Found in universe, now validate it's an interface type name.
-		return validateTypeNameIsInterface(obj, name, pkgPath, typeName)
-	}
-
-	// Handle package-qualified types (e.g., "io.Writer").
-	imp := importer.Default()
-	pkg, err := imp.Import(pkgPath)
-	if err != nil {
-		// Specific error for import failure.
-		return nil, fmt.Errorf("failed to import package %q: %w", pkgPath, err)
-	}
-
-	scope := pkg.Scope()
-	obj := scope.Lookup(typeName)
-	if obj == nil {
-		// Not found within the imported package's scope.
-		return nil, fmt.Errorf("type %q not found in package %q", typeName, pkgPath)
-	}
-
-	// Found in package scope, now validate it's an interface type name.
-	return validateTypeNameIsInterface(obj, name, pkgPath, typeName)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Handle built-in types or unqualified names.
+
+// Not found in universe scope.
+
+// Found in universe, now validate it's an interface type name.
+
+// Handle package-qualified types (e.g., "io.Writer").
+
+// Specific error for import failure.
+
+// Not found within the imported package's scope.
+
+// Found in package scope, now validate it's an interface type name.
 
 // SplitPackageAndName splits a fully qualified type name like "io.Reader" or "example.com/pkg.Type"
 // into its package path and local name.
@@ -99,55 +66,31 @@ func ResolveInterfaceTypeByName(name string) (*types.Interface, error) {
 // For generic types like "iter.Seq[T]" or "iter.Seq[io.Reader]", the type parameters
 // are included in the local name, so it returns ("iter", "Seq[T]") and ("iter", "Seq[io.Reader]").
 func SplitPackageAndName(fullName string) (pkgPath string, localName string) {
-	if !strings.Contains(fullName, ".") {
-		// Assume built-in type (like "error") or unqualified local type.
-		return "", fullName
-	}
-
-	// Find the position of the first '[' which indicates generic type parameters
-	bracketPos := strings.IndexByte(fullName, '[')
-
-	// Determine the substring to search for the last dot
-	searchStr := fullName
-	if bracketPos != -1 {
-		// Only search for dots before the generic type parameters
-		searchStr = fullName[:bracketPos]
-	}
-
-	// Find the last dot in the search string
-	lastDot := strings.LastIndex(searchStr, ".")
-	if lastDot == -1 {
-		// No dot found (shouldn't happen given the initial check, but be safe)
-		return "", fullName
-	}
-
-	pkgPath = fullName[:lastDot]
-	localName = fullName[lastDot+1:]
-	return pkgPath, localName
+	_ = "STUB: not implemented"
+	return "", ""
 }
+
+// Assume built-in type (like "error") or unqualified local type.
+
+// Find the position of the first '[' which indicates generic type parameters
+
+// Determine the substring to search for the last dot
+
+// Only search for dots before the generic type parameters
+
+// Find the last dot in the search string
+
+// No dot found (shouldn't happen given the initial check, but be safe)
 
 // validateTypeNameIsInterface checks if a successfully looked-up types.Object represents
 // a type name that resolves to an interface. It assumes obj is not nil.
 func validateTypeNameIsInterface(obj types.Object, fullName string, pkgPath string, typeName string) (*types.Interface, error) {
-	typeObj, ok := obj.(*types.TypeName)
-	if !ok {
-		// Provide context whether it was expected to be built-in or package-qualified.
-		if pkgPath == "" {
-			return nil, fmt.Errorf("object %q is not a type name but a %T", typeName, obj)
-		}
-		return nil, fmt.Errorf("object %s.%s is not a type name but a %T", pkgPath, typeName, obj)
-	}
-
-	typ := typeObj.Type()
-	if !types.IsInterface(typ) {
-		// Use the original full name in the error message for clarity.
-		return nil, fmt.Errorf("type %s is not an interface", fullName)
-	}
-
-	// Since types.IsInterface passed, we can safely cast typ.Underlying() to *types.Interface
-	t, ok := typ.Underlying().(*types.Interface)
-	if !ok {
-		return nil, fmt.Errorf("type %s is not an interface", fullName)
-	}
-	return t, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Provide context whether it was expected to be built-in or package-qualified.
+
+// Use the original full name in the error message for clarity.
+
+// Since types.IsInterface passed, we can safely cast typ.Underlying() to *types.Interface

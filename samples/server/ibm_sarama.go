@@ -5,56 +5,14 @@
 
 package main
 
-import "github.com/IBM/sarama"
+func ibmSaramaProducer() { _ = "STUB: not implemented"; return }
 
-func ibmSaramaProducer() {
-	cfg := sarama.NewConfig()
-	cfg.Producer.Return.Successes = true
+func ibmSaramaProducerFromClient() { _ = "STUB: not implemented"; return }
 
-	producer, err := sarama.NewSyncProducer([]string{"localhost:9092"}, cfg)
-	if err != nil {
-		panic(err)
-	}
-	defer producer.Close()
-}
+func ibmSaramaAsyncProducer() { _ = "STUB: not implemented"; return }
 
-func ibmSaramaProducerFromClient() {
-	cfg := sarama.NewConfig()
-	cfg.Producer.Return.Successes = true
+// minimum version that supports headers which are required for tracing
 
-	client, err := sarama.NewClient([]string{"localhost:9092"}, cfg)
-	if err != nil {
-		panic(err)
-	}
-	producer, err := sarama.NewSyncProducerFromClient(client)
-	if err != nil {
-		panic(err)
-	}
-	defer producer.Close()
-}
+func ibmSaramaAsyncProducerFromClient() { _ = "STUB: not implemented"; return }
 
-func ibmSaramaAsyncProducer() {
-	cfg := sarama.NewConfig()
-	cfg.Version = sarama.V0_11_0_0 // minimum version that supports headers which are required for tracing
-
-	producer, err := sarama.NewAsyncProducer([]string{"localhost:9092"}, cfg)
-	if err != nil {
-		panic(err)
-	}
-	defer producer.Close()
-}
-
-func ibmSaramaAsyncProducerFromClient() {
-	cfg := sarama.NewConfig()
-	cfg.Version = sarama.V0_11_0_0 // minimum version that supports headers which are required for tracing
-
-	client, err := sarama.NewClient([]string{"localhost:9092"}, cfg)
-	if err != nil {
-		panic(err)
-	}
-	producer, err := sarama.NewAsyncProducerFromClient(client)
-	if err != nil {
-		panic(err)
-	}
-	defer producer.Close()
-}
+// minimum version that supports headers which are required for tracing

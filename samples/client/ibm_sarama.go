@@ -5,25 +5,6 @@
 
 package main
 
-import "github.com/IBM/sarama"
+func ibmSaramaConsumer() { _ = "STUB: not implemented"; return }
 
-func ibmSaramaConsumer() {
-	cfg := sarama.NewConfig()
-	consumer, err := sarama.NewConsumer([]string{"localhost:9092"}, cfg)
-	if err != nil {
-		panic(err)
-	}
-	defer consumer.Close()
-}
-
-func ibmSaramaConsumerFromClient() {
-	client, err := sarama.NewClient([]string{"localhost:9092"}, nil)
-	if err != nil {
-		panic(err)
-	}
-	consumer, err := sarama.NewConsumerFromClient(client)
-	if err != nil {
-		panic(err)
-	}
-	defer consumer.Close()
-}
+func ibmSaramaConsumerFromClient() { _ = "STUB: not implemented"; return }

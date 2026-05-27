@@ -5,16 +5,4 @@
 
 package main
 
-import (
-	"log"
-
-	"google.golang.org/grpc"
-)
-
-func grpcClient() {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer conn.Close()
-}
+func grpcClient() { _ = "STUB: not implemented"; return }

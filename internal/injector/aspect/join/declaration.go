@@ -15,7 +15,6 @@ import (
 	"github.com/DataDog/orchestrion/internal/injector/aspect/may"
 	"github.com/DataDog/orchestrion/internal/injector/typed"
 	"github.com/DataDog/orchestrion/internal/yaml"
-	"github.com/dave/dst"
 	"github.com/goccy/go-yaml/ast"
 )
 
@@ -26,96 +25,60 @@ type declarationOf struct {
 
 // DeclarationOf matches the (top-level) declaration of the specified symbol.
 func DeclarationOf(importPath string, name string) *declarationOf {
-	return &declarationOf{ImportPath: importPath, Name: name}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (i *declarationOf) Matches(ctx context.AspectContext) bool {
-	if ctx.ImportPath() != i.ImportPath {
-		return false
-	}
-
-	switch node := ctx.Node().(type) {
-	case *dst.FuncDecl:
-		return node.Name != nil && node.Name.Name == i.Name
-	case *dst.ValueSpec:
-		if parent := ctx.Chain().Parent(); parent == nil {
-			// No parent, this is almost certainly a syntax error...
-			return false
-		} else if _, isGenDecl := parent.Node().(*dst.GenDecl); !isGenDecl {
-			// Parent isn't a GenDecl, so this is not a top-level declaration.
-			return false
-		}
-		for _, name := range node.Names {
-			if name.Name == i.Name {
-				return true
-			}
-		}
-		return false
-	default:
-		return false
-	}
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (i *declarationOf) ImpliesImported() []string {
-	return []string{i.ImportPath}
-}
+// No parent, this is almost certainly a syntax error...
+
+// Parent isn't a GenDecl, so this is not a top-level declaration.
+
+func (i *declarationOf) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
 
 func (i *declarationOf) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	return ctx.PackageImports(i.ImportPath)
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (i *declarationOf) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	return ctx.FileContains(i.Name)
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
-func (i *declarationOf) Hash(h *fingerprint.Hasher) error {
-	return h.Named("declaration-of", fingerprint.String(i.ImportPath), fingerprint.String(i.Name))
-}
+func (i *declarationOf) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 type valueDeclaration struct {
 	TypeName typed.TypeName
 }
 
 func ValueDeclaration(typeName typed.TypeName) *valueDeclaration {
-	return &valueDeclaration{typeName}
-}
-
-func (i *valueDeclaration) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	return ctx.PackageImports(i.TypeName.ImportPath)
-}
-
-func (*valueDeclaration) FileMayMatch(_ *may.FileContext) may.MatchType {
-	return may.Unknown
-}
-
-func (i *valueDeclaration) Matches(ctx context.AspectContext) bool {
-	parent := ctx.Chain().Parent()
-	if parent == nil {
-		return false
-	}
-
-	if _, ok := parent.Node().(*dst.GenDecl); !ok {
-		return false
-	}
-
-	spec, ok := ctx.Node().(*dst.ValueSpec)
-	if !ok {
-		return false
-	}
-
-	return spec.Type == nil || i.TypeName.Matches(spec.Type)
-}
-
-func (i *valueDeclaration) ImpliesImported() []string {
-	if path := i.TypeName.ImportPath; path != "" {
-		return []string{path}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (i *valueDeclaration) Hash(h *fingerprint.Hasher) error {
-	return h.Named("value-declaration", i.TypeName)
+func (i *valueDeclaration) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
+
+func (*valueDeclaration) FileMayMatch(_ *may.FileContext) may.MatchType {
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
+}
+
+func (i *valueDeclaration) Matches(ctx context.AspectContext) bool {
+	_ = "STUB: not implemented"
+	return false
+}
+
+func (i *valueDeclaration) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
+
+func (i *valueDeclaration) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 // See: https://regex101.com/r/OXDfJ1/1
 var symbolNamePattern = regexp.MustCompile(`\A(.+)\.([\p{L}_][\p{L}_\p{Nd}]*)\z`)

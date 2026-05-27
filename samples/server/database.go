@@ -9,8 +9,6 @@ import (
 	"context"
 	"database/sql"
 	"database/sql/driver"
-	"errors"
-	"log"
 )
 
 func init() {
@@ -20,42 +18,30 @@ func init() {
 type testDriver struct{}
 
 func (*testDriver) Open(string) (driver.Conn, error) {
-	return &testConn{}, nil
+	_ = "STUB: not implemented"
+	return *new(driver.Conn), nil
 }
 
 type testConn struct{}
 
 func (*testConn) Prepare(string) (driver.Stmt, error) {
-	return nil, errors.ErrUnsupported
+	_ = "STUB: not implemented"
+	return *new(driver.Stmt), nil
 }
 
-func (*testConn) Close() error {
-	return nil
-}
+func (*testConn) Close() error { _ = "STUB: not implemented"; return nil }
 
-func (*testConn) Begin() (driver.Tx, error) {
-	return nil, errors.ErrUnsupported
-}
+func (*testConn) Begin() (driver.Tx, error) { _ = "STUB: not implemented"; return *new(driver.Tx), nil }
 
 type testConnector struct{}
 
 func (*testConnector) Connect(context.Context) (driver.Conn, error) {
-	return &testConn{}, nil
+	_ = "STUB: not implemented"
+	return *new(driver.Conn), nil
 }
 
-func (*testConnector) Driver() driver.Driver {
-	return &testDriver{}
-}
+func (*testConnector) Driver() driver.Driver { _ = "STUB: not implemented"; return *new(driver.Driver) }
 
-func openDatabase() (*sql.DB, error) {
-	_, err := sql.Open("test", "mypath")
-	if err != nil {
-		log.Printf("Some error: %v", err)
-	}
-	return sql.Open("test", "mypath")
-}
+func openDatabase() (*sql.DB, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func openDatabase2() *sql.DB {
-	_ = sql.OpenDB(&testConnector{})
-	return sql.OpenDB(&testConnector{})
-}
+func openDatabase2() *sql.DB { _ = "STUB: not implemented"; return nil }

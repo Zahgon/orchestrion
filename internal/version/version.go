@@ -19,18 +19,11 @@ var (
 )
 
 // Tag returns the version tag for this orchestrion build.
-func Tag() string {
-	if buildInfoVersion != "" {
-		return buildInfoVersion
-	}
-	return tag
-}
+func Tag() string { _ = "STUB: not implemented"; return "" }
 
 // TagInfo returns the static tag and a boolean determining whether this is a
 // development build.
-func TagInfo() (staticTag string, isDev bool) {
-	return tag, buildInfoIsDev
-}
+func TagInfo() (staticTag string, isDev bool) { _ = "STUB: not implemented"; return "", false }
 
 func init() {
 	bi, ok := debug.ReadBuildInfo()

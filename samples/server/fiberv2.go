@@ -5,16 +5,4 @@
 
 package main
 
-import (
-	"github.com/gofiber/fiber/v2"
-)
-
-func fiberV2Server() {
-	r := fiber.New()
-	r.Get("/ping", func(c *fiber.Ctx) error {
-		return c.JSON(map[string]any{
-			"message": "pong",
-		})
-	})
-	_ = r.Listen(":8080")
-}
+func fiberV2Server() { _ = "STUB: not implemented"; return }

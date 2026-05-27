@@ -10,28 +10,22 @@ package filelock
 import (
 	"context"
 	"os"
-	"syscall"
 )
 
 // rlock places an advisory shared lock on the specified file.
-func rlock(f *os.File) error {
-	return syscall.Flock(int(f.Fd()), syscall.LOCK_SH)
-}
+func rlock(f *os.File) error { _ = "STUB: not implemented"; return nil }
 
 // lock places an advisory exclusive lock on the specified file.
-func lock(f *os.File) error {
-	return syscall.Flock(int(f.Fd()), syscall.LOCK_EX)
-}
+func lock(f *os.File) error { _ = "STUB: not implemented"; return nil }
 
 // unlock removes any advisory locks from the specified file.
-func unlock(f *os.File) error {
-	return syscall.Flock(int(f.Fd()), syscall.LOCK_UN)
-}
+func unlock(f *os.File) error { _ = "STUB: not implemented"; return nil }
 
 // beforeLockChange is called before the lock state is changed. It is a no-op on
 // POSIX platforms, as [syscall.Flock] allows for a lock to be upgraded or
 // downgraded freely. It returns `false` if the currently held lock is identical
 // to the target state (idempotent), and always returns a `nil` error.
 func (m *Mutex) beforeLockChange(_ context.Context, to lockState) (cont bool, err error) {
-	return m.locked != to, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }

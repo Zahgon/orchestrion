@@ -19,21 +19,18 @@ import (
 type addBlankImport string
 
 func AddBlankImport(path string) addBlankImport {
-	return addBlankImport(path)
+	_ = "STUB: not implemented"
+	return *new(addBlankImport)
 }
 
 func (a addBlankImport) Apply(ctx context.AdviceContext) (bool, error) {
-	added := ctx.AddImport(string(a), "_")
-	return added, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
-func (a addBlankImport) AddedImports() []string {
-	return []string{string(a)}
-}
+func (a addBlankImport) AddedImports() []string { _ = "STUB: not implemented"; return nil }
 
-func (a addBlankImport) Hash(h *fingerprint.Hasher) error {
-	return h.Named("add-blank-import", fingerprint.String(a))
-}
+func (a addBlankImport) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	unmarshalers["add-blank-import"] = func(ctx gocontext.Context, node ast.Node) (Advice, error) {

@@ -5,28 +5,6 @@
 
 package main
 
-import (
-	"fmt"
+func twirpServerSample() { _ = "STUB: not implemented"; return }
 
-	"github.com/twitchtv/twirp"
-)
-
-func twirpServerSample() {
-	var serverOpts *twirp.ServerOptions
-
-	serverOpts = &twirp.ServerOptions{}
-	serverOpts = &twirp.ServerOptions{
-		Hooks: &twirp.ServerHooks{
-			RequestReceived:  nil,
-			RequestRouted:    nil,
-			ResponsePrepared: nil,
-			ResponseSent:     nil,
-			Error:            nil,
-		},
-		Interceptors:     nil,
-		JSONSkipDefaults: false,
-	}
-
-	// these options are used in the twirp generated code
-	fmt.Printf("serverOpts: %v\n", serverOpts)
-}
+// these options are used in the twirp generated code

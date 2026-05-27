@@ -6,75 +6,23 @@
 package report
 
 import (
-	"bytes"
 	"context"
-	"errors"
-	"fmt"
 	"io"
 	"io/fs"
-	"os"
-	"os/exec"
-	"path/filepath"
-	"regexp"
-	"slices"
-	"strings"
-
-	"github.com/DataDog/orchestrion/internal/injector/parse"
-	"github.com/DataDog/orchestrion/internal/toolexec/aspect"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
 // FromWorkDir reads the orchestrion files from a `go build -work` directory and creates a [Report] out of it.
 func FromWorkDir(ctx context.Context, dir string) (Report, error) {
-	return fromWorkFS(ctx, dir, os.DirFS(dir))
+	_ = "STUB: not implemented"
+	return *new(Report), nil
 }
 
 func fromWorkFS(ctx context.Context, root string, fsys fs.FS) (Report, error) {
-	log := zerolog.Ctx(ctx)
-
-	log.Debug().Str("root", root).Msg("reading orchestrion files from work directory")
-
-	entries, err := fs.ReadDir(fsys, ".")
-	if err != nil {
-		return Report{}, fmt.Errorf("read dir: %w", err)
-	}
-
-	var files []ModifiedFile
-	for _, packageBuildDir := range entries {
-		_ = fs.WalkDir(fsys, filepath.Join(packageBuildDir.Name(), aspect.OrchestrionDirPathElement),
-			func(path string, d os.DirEntry, err error) error {
-				if err != nil {
-					return fmt.Errorf("walk dir %s: %w", path, err)
-				}
-
-				if d.IsDir() || !strings.HasSuffix(d.Name(), ".go") {
-					return nil
-				}
-
-				log.Debug().Str("path", path).Msg("found orchestrion file")
-				file, err := NewModifiedFile(fsys, path)
-				if err != nil {
-					return fmt.Errorf("infer original path for %s: %w", path, err)
-				}
-
-				files = append(files, file)
-				return nil
-			},
-		)
-	}
-
-	// Sort the files by their modified path relative to the work directory.
-	slices.SortFunc(files, func(a, b ModifiedFile) int {
-		return strings.Compare(a.modified, b.modified)
-	})
-
-	return Report{
-		files: files,
-		fs:    fsys,
-		root:  root,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(Report), nil
 }
+
+// Sort the files by their modified path relative to the work directory.
 
 type (
 	// ModifiedFile represents a file that has been modified by Orchestrion.
@@ -102,181 +50,68 @@ type (
 // NewModifiedFile creates a new ModifiedFile from the given file system and modified path.
 // If the modified file contains a line directive, it will parse it to find the original path.
 func NewModifiedFile(fsys fs.FS, modifiedPath string) (ModifiedFile, error) {
-	modifiedFile, err := fsys.Open(modifiedPath)
-	if err != nil {
-		return ModifiedFile{}, fmt.Errorf("open %s: %w", modifiedPath, err)
-	}
-
-	defer modifiedFile.Close()
-
-	originalPath, err := parse.ConsumeLineDirective(modifiedFile)
-	if err != nil {
-		return ModifiedFile{}, fmt.Errorf("consume line directive: %w", err)
-	}
-
-	if originalPath != "" {
-		originalPath = filepath.Clean(originalPath)
-	}
-
-	return ModifiedFile{
-		original: originalPath,
-		modified: filepath.Clean(modifiedPath),
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(ModifiedFile), nil
 }
 
-func (m ModifiedFile) String() string {
-	original := m.original
-	if m.original == "" {
-		original = "(unknown original path)"
-	}
-	return fmt.Sprintf("%s -> %s", original, m.modified)
-}
+func (m ModifiedFile) String() string { _ = "STUB: not implemented"; return "" }
 
 // ImportPath converts the modified file path to an import path.
-func (m ModifiedFile) ImportPath() string {
-	dir := filepath.Dir(m.modified)
-	_, pkg, found := strings.Cut(dir, aspect.OrchestrionDirPathElement)
-	if !found {
-		return ""
-	}
-
-	return strings.Trim(pkg, "/")
-}
+func (m ModifiedFile) ImportPath() string { _ = "STUB: not implemented"; return "" }
 
 var _ fs.FS = (*Report)(nil)
 
 func (r Report) Open(name string) (fs.File, error) {
-	for _, file := range r.files {
-		if file.original == name {
-			name = file.modified
-			break
-		}
-	}
-
-	return r.fs.Open(name)
+	_ = "STUB: not implemented"
+	return *new(fs.File), nil
 }
 
 var _ fs.FS = (*Report)(nil)
 
 // WithRegexFilter filters the files in the report based on a regex pattern.
 func (r Report) WithRegexFilter(regex string) (Report, error) {
-	cmpRegex, err := regexp.Compile(regex)
-	if err != nil {
-		return Report{}, fmt.Errorf("invalid regex %q: %w", regex, err)
-	}
-
-	return Report{
-		root: r.root,
-		fs:   r.fs,
-		files: slices.DeleteFunc(r.files, func(file ModifiedFile) bool {
-			return !cmpRegex.MatchString(file.modified)
-		}),
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(Report), nil
 }
 
 // WithSpecialCasesFilter filters the files in the report to include only those that are not weaver special cases
-func (r Report) WithSpecialCasesFilter() Report {
-	return Report{
-		root: r.root,
-		fs:   r.fs,
-		files: slices.DeleteFunc(r.files, func(file ModifiedFile) bool {
-			pkgPath := file.ImportPath()
-			if pkgPath == "synthetic" {
-				return true
-			}
-			behaviour, isSpecial := aspect.FindBehaviorOverride(pkgPath)
-			return isSpecial && behaviour != aspect.NoOverride
-		}),
-	}
-}
+func (r Report) WithSpecialCasesFilter() Report { _ = "STUB: not implemented"; return *new(Report) }
 
 // Diff generates a diff between the original and modified files and writes it to the writer.
 func (r Report) Diff(writer io.Writer) error {
-	var errs []error
+	_ = "STUB: not implemented"
 
 	// Check if the diff command is available, exit early if not
-	if _, err := exec.LookPath("diff"); err != nil {
-		return fmt.Errorf("diff command not found: %w (cannot run orchestrion diff without the diff binary being in the path)", err)
-	}
-
-	for _, file := range r.Files() {
-		if err := r.diff(writer, file); err != nil {
-			errs = append(errs, err)
-		}
-	}
-
-	return errors.Join(errs...)
+	return nil
 }
 
 func (r Report) diff(writer io.Writer, file ModifiedFile) error {
+	_ = "STUB: not implemented"
 	// If originalPath does not exists, it means that we have cgo files in there, just skip it
-	if _, err := os.Open(file.original); os.IsNotExist(err) {
-		return nil
-	}
-
-	// When adding options, always make sure this is supported on all platforms.
-	args := []string{
-		"-u",            // Use the unified context diff format
-		"-d",            // Try harder to minimize the diff
-		"-a",            // Treat all files as text
-		"--color",       // Change the output to colored diff if possible
-		"-w",            // Ignore whitespace and tab changes
-		"-B",            // Ignore blank lines
-		"-I", "^//line", // Don't print line directives in the diff when they would end up being alone in a fragment
-		"--label", file.original, // Label the original file without timestamp for reproducibility
-		"--label", file.modified, // Label the modified file without timestamp for reproducibility
-		file.original, filepath.Join(r.root, file.modified),
-	}
-
-	log.Trace().Any("args", args).Str("root", r.root).Msg("running diff command")
-	cmd := exec.Command("diff", args...)
-
-	var buf bytes.Buffer
-
-	cmd.Stdout = writer
-	cmd.Stderr = &buf
-
-	if err := cmd.Run(); err != nil {
-		var exitErr *exec.ExitError
-		if errors.As(err, &exitErr) {
-			if exitErr.ExitCode() == 1 {
-				return nil // Differences were found, thanks sherlock.
-			}
-		}
-		return fmt.Errorf("running diff command: %w (stderr: %s)", err, buf.String())
-	}
-
 	return nil
 }
+
+// When adding options, always make sure this is supported on all platforms.
+
+// Use the unified context diff format
+// Try harder to minimize the diff
+// Treat all files as text
+// Change the output to colored diff if possible
+// Ignore whitespace and tab changes
+// Ignore blank lines
+// Don't print line directives in the diff when they would end up being alone in a fragment
+// Label the original file without timestamp for reproducibility
+// Label the modified file without timestamp for reproducibility
+
+// Differences were found, thanks sherlock.
 
 // Packages returns an iterator over the unique package names found in the report.
 // It extracts the package names from the file paths, assuming they follow the convention of being
 // constructed as "<work-dir>/orchestrion/src/<github.com/my/repo>/<file.go>".
-func (r Report) Packages() []string {
-	return slices.Sorted(func(yield func(string) bool) {
-		pkgs := make(map[string]bool)
-		for _, file := range r.files {
-			pkg := file.ImportPath()
-			if pkgs[pkg] {
-				continue
-			}
-
-			pkgs[pkg] = true
-			if !yield(pkg) {
-				return
-			}
-		}
-	})
-}
+func (r Report) Packages() []string { _ = "STUB: not implemented"; return nil }
 
 // Files returns an iterator over the modified files in the report.
-func (r Report) Files() []ModifiedFile {
-	return slices.SortedFunc(slices.Values(r.files), func(a, b ModifiedFile) int {
-		return strings.Compare(a.ImportPath(), b.ImportPath())
-	})
-}
+func (r Report) Files() []ModifiedFile { _ = "STUB: not implemented"; return nil }
 
 // IsEmpty checks if the report contains no modified files.
-func (r Report) IsEmpty() bool {
-	return len(r.files) == 0
-}
+func (r Report) IsEmpty() bool { _ = "STUB: not implemented"; return false }

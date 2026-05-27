@@ -7,13 +7,7 @@ package proxy
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"os"
 	"os/exec"
-	"strings"
-
-	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 )
 
 type (
@@ -59,78 +53,34 @@ const (
 	CommandTypeLink
 )
 
-func (t CommandType) String() string {
-	switch t {
-	case CommandTypeCompile:
-		return "compile"
-	case CommandTypeLink:
-		return "link"
-	default:
-		return "<other>"
-	}
-}
+func (t CommandType) String() string { _ = "STUB: not implemented"; return "" }
 
 // ProcessCommand applies a processor on a command if said command matches
 // the input type of said input processor. Nothing happens if the processor does
 // not correspond to the provided command type.
 func ProcessCommand[T Command](ctx context.Context, cmd Command, p CommandProcessor[T]) error {
-	if c, ok := cmd.(T); ok {
-		if err := p(ctx, c); err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // NewCommand initializes a new command object and takes care of tracking the indexes of its
 // arguments
-func NewCommand(args []string) command {
-	cmd := command{
-		args:     args,
-		paramPos: make(map[string]int),
-	}
-	for pos, v := range args[1:] {
-		cmd.paramPos[v] = pos + 1
-	}
-
-	return cmd
-}
+func NewCommand(args []string) command { _ = "STUB: not implemented"; return *new(command) }
 
 func (*command) Close(context.Context, error) error {
+	_ = "STUB: not implemented"
 	// Nothing to do...
 	return nil
 }
 
 // SetFlag replaces the value of the specified flag with the provided one.
 // Returns an error if the flag is not present in the current arguments list.
-func (cmd *command) SetFlag(flag string, val string) error {
-	for arg, idx := range cmd.paramPos {
-		if arg == flag || arg == "-"+flag {
-			cmd.args[idx+1] = val
-			return nil
-		}
-
-		f, _, ok := strings.Cut(arg, "=")
-		if !ok || (f != flag && f != "-"+flag) {
-			continue
-		}
-		cmd.args[idx] = f + "=" + val
-		return nil
-	}
-
-	return fmt.Errorf("argument %q not found in %q", flag, cmd.args)
-}
+func (cmd *command) SetFlag(flag string, val string) error { _ = "STUB: not implemented"; return nil }
 
 // ReplaceParam will replace any parameter of the command provided it is found
 // A parameter can be a flag, an option, a value, etc
 func (cmd *command) ReplaceParam(param string, val string) error {
-	i, ok := cmd.paramPos[param]
-	if !ok {
-		return fmt.Errorf("%s not found", param)
-	}
-	cmd.args[i] = val
-	delete(cmd.paramPos, param)
-	cmd.paramPos[val] = i
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -140,37 +90,12 @@ type RunCommandOption func(*exec.Cmd)
 
 // RunCommand executes the underlying go tool command and forwards the program's standard fluxes
 func RunCommand(ctx context.Context, cmd Command, opts ...RunCommandOption) (err error) {
-	span, _ := tracer.StartSpanFromContext(ctx, cmd.Type().String(),
-		tracer.ServiceName("go-tool"),
-		tracer.ResourceName(strings.Join(cmd.Args(), " ")),
-	)
-	defer func() { span.Finish(tracer.WithError(err)) }()
-
-	args := cmd.Args()
-	c := exec.Command(args[0], args[1:]...)
-	if c == nil {
-		return errors.New("command couldn't build")
-	}
-
-	c.Stdin = os.Stdin
-	c.Stdout = os.Stdout
-	c.Stderr = os.Stderr
-
-	for _, opt := range opts {
-		opt(c)
-	}
-
-	return c.Run()
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (*command) Type() CommandType {
-	return CommandTypeOther
-}
+func (*command) Type() CommandType { _ = "STUB: not implemented"; return *new(CommandType) }
 
-func (cmd *command) Args() []string {
-	return cmd.args
-}
+func (cmd *command) Args() []string { _ = "STUB: not implemented"; return nil }
 
-func (*command) ShowVersion() bool {
-	return false
-}
+func (*command) ShowVersion() bool { _ = "STUB: not implemented"; return false }

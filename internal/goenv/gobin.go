@@ -5,20 +5,9 @@
 
 package goenv
 
-import "os/exec"
-
 var goBinPath string
 
 // GoBinPath returns the resolved path to the `go` command's binary. The result is cached to avoid
 // looking it up multiple times. If the lookup fails, the error is returned and the result is not
 // cached.
-func GoBinPath() (string, error) {
-	if goBinPath == "" {
-		goBin, err := exec.LookPath("go")
-		if err != nil {
-			return "", err
-		}
-		goBinPath = goBin
-	}
-	return goBinPath, nil
-}
+func GoBinPath() (string, error) { _ = "STUB: not implemented"; return "", nil }

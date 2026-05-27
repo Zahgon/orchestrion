@@ -7,10 +7,7 @@ package join
 
 import (
 	gocontext "context"
-	"errors"
-	"fmt"
 	"go/types"
-	"strings"
 
 	"github.com/DataDog/orchestrion/internal/fingerprint"
 	"github.com/DataDog/orchestrion/internal/injector/aspect/context"
@@ -54,95 +51,55 @@ type (
 
 // Function matches function declaration nodes based on properties of
 // their signature.
-func Function(opts ...FunctionOption) *functionDeclaration {
-	return &functionDeclaration{Options: opts}
-}
+func Function(opts ...FunctionOption) *functionDeclaration { _ = "STUB: not implemented"; return nil }
 
 func (s *functionDeclaration) ImpliesImported() (list []string) {
-	for _, opt := range s.Options {
-		list = append(list, opt.impliesImported()...)
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (s *functionDeclaration) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	sum := may.Match
-	for _, candidate := range s.Options {
-		sum = sum.And(candidate.packageMayMatch(ctx))
-		if sum == may.NeverMatch {
-			return may.NeverMatch
-		}
-	}
-	return sum
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (s *functionDeclaration) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	sum := may.Match
-	for _, candidate := range s.Options {
-		sum = sum.And(candidate.fileMayMatch(ctx))
-		if sum == may.NeverMatch {
-			return may.NeverMatch
-		}
-	}
-	return sum
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (s *functionDeclaration) Matches(ctx context.AspectContext) bool {
-	info := functionInformation{
-		ImportPath:   ctx.ImportPath(),
-		typeResolver: ctx,
-	}
-
-	if decl, ok := ctx.Node().(*dst.FuncDecl); ok {
-		if decl.Recv != nil && len(decl.Recv.List) == 1 {
-			info.Receiver = decl.Recv.List[0].Type
-		}
-		info.Name = decl.Name.Name
-		info.Type = decl.Type
-	} else if lit, ok := ctx.Node().(*dst.FuncLit); ok {
-		info.Type = lit.Type
-	} else {
-		return false
-	}
-
-	for _, opt := range s.Options {
-		if !opt.evaluate(info) {
-			return false
-		}
-	}
-
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (s *functionDeclaration) Hash(h *fingerprint.Hasher) error {
-	return h.Named("function", fingerprint.List[FunctionOption](s.Options))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type functionName string
 
-func Name(name string) FunctionOption {
-	return functionName(name)
-}
+func Name(name string) FunctionOption { _ = "STUB: not implemented"; return *new(FunctionOption) }
 
-func (functionName) impliesImported() []string {
-	return nil
-}
+func (functionName) impliesImported() []string { _ = "STUB: not implemented"; return nil }
 
 func (functionName) packageMayMatch(_ *may.PackageContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (fo functionName) fileMayMatch(ctx *may.FileContext) may.MatchType {
-	return ctx.FileContains(string(fo))
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (fo functionName) evaluate(info functionInformation) bool {
-	return info.Name == string(fo)
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (fo functionName) Hash(h *fingerprint.Hasher) error {
-	return h.Named("name", fingerprint.String(fo))
-}
+func (fo functionName) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 type signature struct {
 	Arguments []typed.TypeName
@@ -152,83 +109,28 @@ type signature struct {
 // Signature matches function declarations based on their arguments and return
 // value types.
 func Signature(args []typed.TypeName, ret []typed.TypeName) FunctionOption {
-	return &signature{Arguments: args, Results: ret}
+	_ = "STUB: not implemented"
+	return *new(FunctionOption)
 }
 
 func (fo *signature) packageMayMatch(ctx *may.PackageContext) may.MatchType {
-	sum := may.Match
-	for _, candidate := range fo.Arguments {
-		sum = sum.And(ctx.PackageImports(candidate.ImportPath))
-		if sum == may.NeverMatch {
-			return may.NeverMatch
-		}
-	}
-	for _, candidate := range fo.Results {
-		sum = sum.And(ctx.PackageImports(candidate.ImportPath))
-		if sum == may.NeverMatch {
-			return may.NeverMatch
-		}
-	}
-	return sum
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (*signature) fileMayMatch(_ *may.FileContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
-func (fo *signature) impliesImported() (list []string) {
-	for _, tn := range fo.Arguments {
-		if path := tn.ImportPath; path != "" {
-			list = append(list, path)
-		}
-	}
-	for _, tn := range fo.Results {
-		if path := tn.ImportPath; path != "" {
-			list = append(list, path)
-		}
-	}
-	return
-}
+func (fo *signature) impliesImported() (list []string) { _ = "STUB: not implemented"; return nil }
 
 func (fo *signature) evaluate(info functionInformation) bool {
-	if info.Type.Results == nil || len(info.Type.Results.List) == 0 {
-		if len(fo.Results) != 0 {
-			return false
-		}
-	} else if len(info.Type.Results.List) != len(fo.Results) {
-		return false
-	} else {
-		for i := 0; i < len(fo.Results); i++ {
-			if !fo.Results[i].Matches(info.Type.Results.List[i].Type) {
-				return false
-			}
-		}
-	}
-
-	if info.Type.Params == nil || len(info.Type.Params.List) == 0 {
-		if len(fo.Arguments) != 0 {
-			return false
-		}
-	} else if len(info.Type.Params.List) != len(fo.Arguments) {
-		return false
-	} else {
-		for i := 0; i < len(fo.Arguments); i++ {
-			if !fo.Arguments[i].Matches(info.Type.Params.List[i].Type) {
-				return false
-			}
-		}
-	}
-
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (fo *signature) Hash(h *fingerprint.Hasher) error {
-	return h.Named(
-		"signature",
-		fingerprint.List[typed.TypeName](fo.Arguments),
-		fingerprint.List[typed.TypeName](fo.Results),
-	)
-}
+func (fo *signature) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 type signatureContains struct {
 	signature
@@ -237,128 +139,83 @@ type signatureContains struct {
 // SignatureContains matches function declarations based on their arguments and
 // return value types in any order and does not require all arguments or return values to be present.
 func SignatureContains(args []typed.TypeName, ret []typed.TypeName) FunctionOption {
-	return &signatureContains{signature{Arguments: args, Results: ret}}
+	_ = "STUB: not implemented"
+	return *new(FunctionOption)
 }
 
 func (fo *signatureContains) Hash(h *fingerprint.Hasher) error {
-	return h.Named(
-		"signature-contains",
-		fingerprint.List[typed.TypeName](fo.Arguments),
-		fingerprint.List[typed.TypeName](fo.Results),
-	)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (fo *signatureContains) evaluate(info functionInformation) bool {
-	if containsAnyType(fo.Results, info.Type.Results) {
-		return true
-	}
-
-	if containsAnyType(fo.Arguments, info.Type.Params) {
-		return true
-	}
-
+	_ = "STUB: not implemented"
 	return false
 }
 
 // containsAnyType checks if any of the expected types match any of the actual types in the field list.
 // Returns false if either slice is empty or nil.
 func containsAnyType(expectedTypes []typed.TypeName, fieldList *dst.FieldList) bool {
+	_ = "STUB: not implemented"
 	// Quick return if either side is empty.
-	if len(expectedTypes) == 0 || fieldList == nil || len(fieldList.List) == 0 {
-		return false
-	}
-
-	// Check if any expected type matches any actual type.
-	for _, expected := range expectedTypes {
-		for _, actual := range fieldList.List {
-			if expected.Matches(actual.Type) {
-				return true
-			}
-		}
-	}
-
 	return false
 }
+
+// Check if any expected type matches any actual type.
 
 type receiver struct {
 	TypeName typed.TypeName
 }
 
 func Receiver(typeName typed.TypeName) FunctionOption {
-	return &receiver{typeName}
+	_ = "STUB: not implemented"
+	return *new(FunctionOption)
 }
 
 func (fo *receiver) packageMayMatch(ctx *may.PackageContext) may.MatchType {
-	if ctx.ImportPath == fo.TypeName.ImportPath {
-		return may.Match
-	}
-
-	return may.NeverMatch
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (fo *receiver) fileMayMatch(ctx *may.FileContext) may.MatchType {
-	return ctx.FileContains(fo.TypeName.Name)
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (fo *receiver) evaluate(info functionInformation) bool {
-	return info.Receiver != nil && fo.TypeName.MatchesDefinition(info.Receiver, info.ImportPath)
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (fo *receiver) impliesImported() []string {
-	return []string{fo.TypeName.ImportPath}
-}
+func (fo *receiver) impliesImported() []string { _ = "STUB: not implemented"; return nil }
 
-func (fo *receiver) Hash(h *fingerprint.Hasher) error {
-	return h.Named("receiver", fo.TypeName)
-}
+func (fo *receiver) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 type functionBody struct {
 	Function Point
 }
 
 // FunctionBody returns the *dst.BlockStmt of the matched *dst.FuncDecl body.
-func FunctionBody(up Point) *functionBody {
-	if up == nil {
-		panic("upstream FunctionDeclaration InjectionPoint cannot be nil")
-	}
-	return &functionBody{Function: up}
-}
+func FunctionBody(up Point) *functionBody { _ = "STUB: not implemented"; return nil }
 
-func (s *functionBody) ImpliesImported() []string {
-	return s.Function.ImpliesImported()
-}
+func (s *functionBody) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
 
 func (s *functionBody) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	return s.Function.PackageMayMatch(ctx)
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (s *functionBody) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	return s.Function.FileMayMatch(ctx)
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (s *functionBody) Matches(ctx context.AspectContext) bool {
-	parent := ctx.Parent()
-	if parent == nil {
-		return false
-	}
-	defer parent.Release()
-	if !s.Function.Matches(parent) {
-		return false
-	}
-
-	switch parent := parent.Node().(type) {
-	case *dst.FuncDecl:
-		return ctx.Node() == parent.Body
-	case *dst.FuncLit:
-		return ctx.Node() == parent.Body
-	default:
-		return false
-	}
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (s *functionBody) Hash(h *fingerprint.Hasher) error {
-	return h.Named("function-body", s.Function)
-}
+func (s *functionBody) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 // resultImplements matches functions where at least one return value's type
 // implements the specified interface.
@@ -369,65 +226,61 @@ type resultImplements struct {
 // ResultImplements creates a FunctionOption that matches functions where at least one
 // return value implements the named interface.
 func ResultImplements(interfaceName string) FunctionOption {
-	return &resultImplements{InterfaceName: interfaceName}
+	_ = "STUB: not implemented"
+	return *new(FunctionOption)
 }
 
 func (*resultImplements) impliesImported() []string {
+	_ = "STUB: not implemented"
 	// A type can implement an interface without importing the interface's package
 	// due to Go's structural typing system.
 	return nil
 }
 
 func (_ *resultImplements) packageMayMatch(_ *may.PackageContext) may.MatchType {
+	_ = "STUB: not implemented"
 	// Cannot reliably determine possibility of match based on package imports
 	// due to structural typing. A type can implement an interface without
 	// importing the interface's package.
-	return may.Unknown
+	return *new(may.MatchType)
 }
 
 func (_ *resultImplements) fileMayMatch(_ *may.FileContext) may.MatchType {
+	_ = "STUB: not implemented"
 	// Cannot reliably determine possibility of match based on file contents
 	// due to structural typing and type aliases.
-	return may.Unknown
+	return *new(may.MatchType)
 }
 
 // evaluateFieldListImplements checks if any field in the list matches the interfaceName,
 // either by exact type name or by interface implementation.
 func evaluateFieldListImplements(fields *dst.FieldList, interfaceName string, info functionInformation) bool {
-	if fields == nil || len(fields.List) == 0 {
-		return false
-	}
-
-	// Optimization: First, check for an exact match using the helper.
-	if _, found := typed.FindMatchingTypeName(fields, interfaceName); found {
-		return true // Found direct match
-	}
-
-	// If no exact match, check implementation (requires type resolver).
-	if info.typeResolver == nil {
-		return false // Cannot check implementation without resolver.
-	}
-
-	targetInterface, err := typed.ResolveInterfaceTypeByName(interfaceName)
-	if err != nil {
-		return false // Invalid interface name.
-	}
-
-	for _, field := range fields.List {
-		if typed.ExprImplements(info.typeResolver, field.Type, targetInterface) {
-			return true // Found an implementing type.
-		}
-	}
-
-	return false // No match found.
+	_ = "STUB: not implemented"
+	return false
 }
 
+// Optimization: First, check for an exact match using the helper.
+
+// Found direct match
+
+// If no exact match, check implementation (requires type resolver).
+
+// Cannot check implementation without resolver.
+
+// Invalid interface name.
+
+// Found an implementing type.
+
+// No match found.
+
 func (fo *resultImplements) evaluate(info functionInformation) bool {
-	return evaluateFieldListImplements(info.Type.Results, fo.InterfaceName, info)
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (fo *resultImplements) Hash(h *fingerprint.Hasher) error {
-	return h.Named("result-implements", fingerprint.String(fo.InterfaceName))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // finalResultImplements matches functions where specifically the final return value
@@ -439,61 +292,56 @@ type finalResultImplements struct {
 // FinalResultImplements creates a FunctionOption that matches functions where the final
 // return value implements the named interface.
 func FinalResultImplements(interfaceName string) FunctionOption {
-	return &finalResultImplements{InterfaceName: interfaceName}
+	_ = "STUB: not implemented"
+	return *new(FunctionOption)
 }
 
 func (*finalResultImplements) impliesImported() []string {
+	_ = "STUB: not implemented"
 	// A type can implement an interface without importing the interface's package
 	// due to Go's structural typing system.
 	return nil
 }
 
 func (_ *finalResultImplements) packageMayMatch(_ *may.PackageContext) may.MatchType {
+	_ = "STUB: not implemented"
 	// Cannot reliably determine possibility of match based on package imports
 	// due to structural typing. A type can implement an interface without
 	// importing the interface's package.
-	return may.Unknown
+	return *new(may.MatchType)
 }
 
 func (_ *finalResultImplements) fileMayMatch(_ *may.FileContext) may.MatchType {
+	_ = "STUB: not implemented"
 	// Cannot reliably determine possibility of match based on file contents
 	// due to structural typing and type aliases.
-	return may.Unknown
+	return *new(may.MatchType)
 }
 
 func (fo *finalResultImplements) evaluate(info functionInformation) bool {
-	if info.Type.Results == nil || len(info.Type.Results.List) == 0 {
-		// No return values, no match.
-		return false
-	}
-
-	// Optimization: First, check for an exact match using TypeName parsing.
-	if tn, err := typed.NewTypeName(fo.InterfaceName); err == nil {
-		lastField := info.Type.Results.List[len(info.Type.Results.List)-1]
-		if tn.Matches(lastField.Type) {
-			return true // Found direct match
-		}
-	} // If parsing failed or no match, fall through to type resolution.
-
-	// Ensure the type resolver is available.
-	if info.typeResolver == nil {
-		return false
-	}
-
-	// Resolve the target interface name (e.g., "io.Reader", "error") to a types.Interface.
-	targetInterface, err := typed.ResolveInterfaceTypeByName(fo.InterfaceName)
-	if err != nil {
-		// If the interface name is invalid or cannot be resolved, we cannot match.
-		return false
-	}
-
-	// Check if the last field implements the interface.
-	lastField := info.Type.Results.List[len(info.Type.Results.List)-1]
-	return typed.ExprImplements(info.typeResolver, lastField.Type, targetInterface)
+	_ = "STUB: not implemented"
+	return false
 }
 
+// No return values, no match.
+
+// Optimization: First, check for an exact match using TypeName parsing.
+
+// Found direct match
+
+// If parsing failed or no match, fall through to type resolution.
+
+// Ensure the type resolver is available.
+
+// Resolve the target interface name (e.g., "io.Reader", "error") to a types.Interface.
+
+// If the interface name is invalid or cannot be resolved, we cannot match.
+
+// Check if the last field implements the interface.
+
 func (fo *finalResultImplements) Hash(h *fingerprint.Hasher) error {
-	return h.Named("final-result-implements", fingerprint.String(fo.InterfaceName))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // argumentImplements matches functions where at least one argument's type
@@ -505,36 +353,35 @@ type argumentImplements struct {
 // ArgumentImplements creates a FunctionOption that matches functions where at least one
 // argument implements the named interface.
 func ArgumentImplements(interfaceName string) FunctionOption {
-	return &argumentImplements{InterfaceName: interfaceName}
+	_ = "STUB: not implemented"
+	return *new(FunctionOption)
 }
 
-func (fo *argumentImplements) impliesImported() []string {
-	pkgPath, _ := typed.SplitPackageAndName(fo.InterfaceName)
-	if pkgPath != "" {
-		return []string{pkgPath}
-	}
-	return nil
-}
+func (fo *argumentImplements) impliesImported() []string { _ = "STUB: not implemented"; return nil }
 
 func (_ *argumentImplements) packageMayMatch(_ *may.PackageContext) may.MatchType {
+	_ = "STUB: not implemented"
 	// Cannot reliably determine possibility of match based on package imports
 	// due to structural typing. A type can implement an interface without
 	// importing the interface's package.
-	return may.Unknown
+	return *new(may.MatchType)
 }
 
 func (_ *argumentImplements) fileMayMatch(_ *may.FileContext) may.MatchType {
+	_ = "STUB: not implemented"
 	// Cannot reliably determine possibility of match based on file contents
 	// due to structural typing and type aliases.
-	return may.Unknown
+	return *new(may.MatchType)
 }
 
 func (fo *argumentImplements) evaluate(info functionInformation) bool {
-	return evaluateFieldListImplements(info.Type.Params, fo.InterfaceName, info)
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (fo *argumentImplements) Hash(h *fingerprint.Hasher) error {
-	return h.Named("argument-implements", fingerprint.String(fo.InterfaceName))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func init() {
@@ -564,116 +411,10 @@ type unmarshalFuncDeclOption struct {
 }
 
 func (o *unmarshalFuncDeclOption) UnmarshalYAML(ctx gocontext.Context, node ast.Node) error {
-	mapping, ok := node.(*ast.MappingNode)
-	if !ok {
-		return errors.New("cannot unmarshal into a FuncDeclOption: not a mapping")
-	}
-
-	if len(mapping.Values) != 1 {
-		return errors.New("cannot unmarshal into a FuncDeclOption: not a singleton mapping")
-	}
-
-	var key string
-	if err := yaml.NodeToValueContext(ctx, mapping.Values[0].Key, &key); err != nil {
-		return err
-	}
-
-	switch key {
-	case "name":
-		var name string
-		if err := yaml.NodeToValueContext(ctx, mapping.Values[0].Value, &name); err != nil {
-			return err
-		}
-		o.FunctionOption = Name(name)
-	case "receiver":
-		var arg string
-		if err := yaml.NodeToValueContext(ctx, mapping.Values[0].Value, &arg); err != nil {
-			return err
-		}
-		tn, err := typed.NewTypeName(arg)
-		if err != nil {
-			return err
-		}
-		o.FunctionOption = Receiver(tn)
-	case "signature", "signature-contains":
-		var sig struct {
-			Args  []string            `yaml:"args"`
-			Ret   []string            `yaml:"returns"`
-			Extra map[string]ast.Node `yaml:",inline"`
-		}
-		if err := yaml.NodeToValueContext(ctx, mapping.Values[0].Value, &sig); err != nil {
-			return err
-		}
-		delete(sig.Extra, "args")
-		delete(sig.Extra, "returns")
-		if len(sig.Extra) != 0 {
-			keys := make([]string, 0, len(sig.Extra))
-			for key, val := range sig.Extra {
-				keys = append(keys, fmt.Sprintf("%q (line %d)", key, val.GetToken().Position.Line))
-			}
-			return fmt.Errorf("unexpected keys: %s", strings.Join(keys, ", "))
-		}
-
-		var args []typed.TypeName
-		if len(sig.Args) > 0 {
-			args = make([]typed.TypeName, len(sig.Args))
-			for i, a := range sig.Args {
-				var err error
-				if args[i], err = typed.NewTypeName(a); err != nil {
-					return err
-				}
-			}
-		}
-
-		var ret []typed.TypeName
-		if len(sig.Ret) > 0 {
-			ret = make([]typed.TypeName, len(sig.Ret))
-			for i, r := range sig.Ret {
-				var err error
-				if ret[i], err = typed.NewTypeName(r); err != nil {
-					return err
-				}
-			}
-		}
-
-		switch key {
-		case "signature":
-			o.FunctionOption = Signature(args, ret)
-		case "signature-contains":
-			o.FunctionOption = SignatureContains(args, ret)
-		}
-	case "result-implements":
-		var ifaceName string
-		if err := yaml.NodeToValueContext(ctx, mapping.Values[0].Value, &ifaceName); err != nil {
-			return err
-		}
-		if ifaceName == "" {
-			return fmt.Errorf("line %d: 'result-implements' cannot be empty", node.GetToken().Position.Line)
-		}
-		// NOTE: Validation happens later during type resolution.
-		o.FunctionOption = ResultImplements(ifaceName)
-	case "final-result-implements":
-		var ifaceName string
-		if err := yaml.NodeToValueContext(ctx, mapping.Values[0].Value, &ifaceName); err != nil {
-			return err
-		}
-		if ifaceName == "" {
-			return fmt.Errorf("line %d: 'final-result-implements' cannot be empty", node.GetToken().Position.Line)
-		}
-		// NOTE: Validation happens later during type resolution.
-		o.FunctionOption = FinalResultImplements(ifaceName)
-	case "argument-implements":
-		var ifaceName string
-		if err := yaml.NodeToValueContext(ctx, mapping.Values[0].Value, &ifaceName); err != nil {
-			return err
-		}
-		if ifaceName == "" {
-			return fmt.Errorf("line %d: 'argument-implements' cannot be empty", node.GetToken().Position.Line)
-		}
-		o.FunctionOption = ArgumentImplements(ifaceName)
-	default:
-		return fmt.Errorf("unknown FuncDeclOption name: %q", key)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// NOTE: Validation happens later during type resolution.
+
+// NOTE: Validation happens later during type resolution.

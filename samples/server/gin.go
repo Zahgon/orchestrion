@@ -5,18 +5,4 @@
 
 package main
 
-import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
-)
-
-func ginServer() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run()
-}
+func ginServer() { _ = "STUB: not implemented"; return }

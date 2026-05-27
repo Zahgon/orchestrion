@@ -7,8 +7,6 @@ package context
 
 import (
 	gocontext "context"
-	"fmt"
-	"go/version"
 
 	"github.com/DataDog/orchestrion/internal/fingerprint"
 	"github.com/DataDog/orchestrion/internal/yaml"
@@ -21,61 +19,36 @@ type GoLangVersion struct {
 }
 
 func ParseGoLangVersion(lang string) (GoLangVersion, error) {
-	if !version.IsValid(lang) {
-		return GoLangVersion{}, fmt.Errorf(`invalid go language level (expected e.g, "go1.18"): %q`, lang)
-	}
-	return GoLangVersion{lang}, nil
+	_ = "STUB: not implemented"
+	return *new(GoLangVersion), nil
 }
 
 func MustParseGoLangVersion(lang string) GoLangVersion {
-	val, err := ParseGoLangVersion(lang)
-	if err != nil {
-		panic(err)
-	}
-	return val
+	_ = "STUB: not implemented"
+	return *new(GoLangVersion)
 }
 
 func (g GoLangVersion) String() string {
-	return g.label
+	_ = "STUB: not implemented"
+
+	// IsAny returns true if the GoLang version selection is blank, meaning no particular constraint is
+	// imposed on language level.
+	return ""
 }
 
-// IsAny returns true if the GoLang version selection is blank, meaning no particular constraint is
-// imposed on language level.
-func (g GoLangVersion) IsAny() bool {
-	return g.label == ""
-}
+func (g GoLangVersion) IsAny() bool { _ = "STUB: not implemented"; return false }
 
-func (g *GoLangVersion) SetAtLeast(other GoLangVersion) {
-	if Compare(*g, other) >= 0 {
-		return
-	}
-	g.label = other.label
-}
+func (g *GoLangVersion) SetAtLeast(other GoLangVersion) { _ = "STUB: not implemented"; return }
 
-func Compare(left GoLangVersion, right GoLangVersion) int {
-	return version.Compare(version.Lang(left.label), version.Lang(right.label))
-}
+func Compare(left GoLangVersion, right GoLangVersion) int { _ = "STUB: not implemented"; return 0 }
 
 var _ fingerprint.Hashable = (*GoLangVersion)(nil)
 
-func (g GoLangVersion) Hash(h *fingerprint.Hasher) error {
-	return h.Named("GoLangVersion", fingerprint.String(g.label))
-}
+func (g GoLangVersion) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 var _ yaml.NodeUnmarshalerContext = (*GoLangVersion)(nil)
 
 func (g *GoLangVersion) UnmarshalYAML(ctx gocontext.Context, node ast.Node) error {
-	var lang string
-	if err := yaml.NodeToValueContext(ctx, node, &lang); err != nil {
-		return err
-	}
-
-	val, err := ParseGoLangVersion(lang)
-	if err != nil {
-		return err
-	}
-
-	*g = val
-
+	_ = "STUB: not implemented"
 	return nil
 }

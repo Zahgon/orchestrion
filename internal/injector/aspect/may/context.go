@@ -23,15 +23,8 @@ type PackageContext struct {
 }
 
 func (ctx *PackageContext) PackageImports(path string) MatchType {
-	if path == "" {
-		return Unknown
-	}
-	_, ok := ctx.ImportMap[path]
-	if ok || path == ctx.ImportPath {
-		return Match
-	}
-
-	return NeverMatch
+	_ = "STUB: not implemented"
+	return *new(MatchType)
 }
 
 // FileContext is the context for a file to be matched.
@@ -47,13 +40,6 @@ type FileContext struct {
 }
 
 func (ctx *FileContext) FileContains(content string) MatchType {
-	ctx.once.Do(func() {
-		ctx.index = suffixarray.New(ctx.FileContent)
-	})
-
-	if len(ctx.index.Lookup([]byte(content), 1)) > 0 {
-		return Match
-	}
-
-	return NeverMatch
+	_ = "STUB: not implemented"
+	return *new(MatchType)
 }

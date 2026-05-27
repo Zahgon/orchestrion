@@ -5,10 +5,6 @@
 
 package may
 
-import (
-	"fmt"
-)
-
 // MatchType is an enumeration of the possible outcomes of a join point
 type MatchType byte
 
@@ -29,18 +25,7 @@ const (
 // | N | Y     |
 // | ? | ?     |
 // | Y | N     |
-func (m MatchType) Not() MatchType {
-	switch m {
-	case Match:
-		return NeverMatch
-	case NeverMatch:
-		return Match
-	case Unknown:
-		return Unknown
-	default:
-		panic(fmt.Sprintf("unknown MatchType: %d", m))
-	}
-}
+func (m MatchType) Not() MatchType { _ = "STUB: not implemented"; return *new(MatchType) }
 
 // Or returns the logical OR of two MatchType values
 // Truth table:
@@ -53,17 +38,7 @@ func (m MatchType) Not() MatchType {
 // | ? | ? | ?       |
 // | ? | Y | Y       |
 // | Y | Y | Y       |
-func (m MatchType) Or(other MatchType) MatchType {
-	if m == Match || other == Match {
-		return Match
-	}
-
-	if m == NeverMatch && other == NeverMatch {
-		return NeverMatch
-	}
-
-	return Unknown
-}
+func (m MatchType) Or(other MatchType) MatchType { _ = "STUB: not implemented"; return *new(MatchType) }
 
 // And returns the logical AND of two MatchType values
 // Truth table:
@@ -77,11 +52,6 @@ func (m MatchType) Or(other MatchType) MatchType {
 // | ? | Y | ?       |
 // | Y | Y | Y       |
 func (m MatchType) And(other MatchType) MatchType {
-	if m == NeverMatch || other == NeverMatch {
-		return NeverMatch
-	}
-	if m == Match && other == Match {
-		return Match
-	}
-	return Unknown
+	_ = "STUB: not implemented"
+	return *new(MatchType)
 }

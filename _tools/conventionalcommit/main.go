@@ -12,16 +12,10 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"flag"
-	"fmt"
 	"log"
-	"maps"
 	"net/http"
 	"os"
-	"regexp"
-	"slices"
-	"strings"
 
 	"github.com/google/go-github/v69/github"
 )
@@ -131,17 +125,4 @@ func main() {
 	}
 }
 
-func labelForTitle(title string) (string, error) {
-	regexText := fmt.Sprintf(`^(%s)(?:\(.+\))?: .*$`, strings.Join(slices.Collect(maps.Keys(conventionalLabels)), "|"))
-	regex, err := regexp.Compile(regexText)
-	if err != nil {
-		return "", err
-	}
-
-	matches := regex.FindStringSubmatch(title)
-	if matches == nil {
-		return "", errors.New("title does not match expected conventional commit format")
-	}
-
-	return conventionalLabels[matches[1]], nil
-}
+func labelForTitle(title string) (string, error) { _ = "STUB: not implemented"; return "", nil }

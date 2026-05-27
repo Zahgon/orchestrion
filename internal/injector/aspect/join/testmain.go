@@ -18,34 +18,26 @@ import (
 type testMain bool
 
 func (t testMain) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	if ctx.TestMain == bool(t) {
-		return may.Match
-	}
-
-	return may.NeverMatch
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (testMain) FileMayMatch(_ *may.FileContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *
+
+	// TestMain matches only nodes in ASTs in files that either are (if true), or
+	// are not (if false) part of a synthetic test main package.
+	new(may.MatchType)
 }
 
-// TestMain matches only nodes in ASTs in files that either are (if true), or
-// are not (if false) part of a synthetic test main package.
-func TestMain(v bool) testMain {
-	return testMain(v)
-}
+func TestMain(v bool) testMain { _ = "STUB: not implemented"; return *new(testMain) }
 
-func (t testMain) Matches(ctx context.AspectContext) bool {
-	return ctx.TestMain() == bool(t)
-}
+func (t testMain) Matches(ctx context.AspectContext) bool { _ = "STUB: not implemented"; return false }
 
-func (testMain) ImpliesImported() []string {
-	return nil
-}
+func (testMain) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
 
-func (t testMain) Hash(h *fingerprint.Hasher) error {
-	return h.Named("test-main", fingerprint.Bool(t))
-}
+func (t testMain) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	unmarshalers["test-main"] = func(ctx gocontext.Context, node ast.Node) (Point, error) {

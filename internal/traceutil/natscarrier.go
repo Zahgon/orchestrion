@@ -6,8 +6,6 @@
 package traceutil
 
 import (
-	"strings"
-
 	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/nats-io/nats.go"
 )
@@ -19,15 +17,9 @@ type NATSCarrier struct {
 var _ tracer.TextMapReader = (*NATSCarrier)(nil)
 var _ tracer.TextMapWriter = (*NATSCarrier)(nil)
 
-func (c NATSCarrier) Set(key string, value string) {
-	c.Msg.Header.Add(key, value)
-}
+func (c NATSCarrier) Set(key string, value string) { _ = "STUB: not implemented"; return }
 
 func (c NATSCarrier) ForeachKey(handler func(key string, val string) error) error {
-	for key, val := range c.Msg.Header {
-		if err := handler(key, strings.Join(val, " ")); err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }

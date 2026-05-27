@@ -16,7 +16,6 @@ import (
 	"runtime/pprof"
 	"runtime/trace"
 	"slices"
-	"strconv"
 	"strings"
 	"time"
 
@@ -229,110 +228,27 @@ var (
 	logLevel    = zerolog.Disabled
 )
 
-func actionSetLogLevel(ctx *cli.Context, value string) error {
-	if err := os.Setenv(envVarOrchestrionLogLevel, value); err != nil {
-		return cli.Exit(fmt.Errorf("setting environment %s: %w", envVarOrchestrionLogLevel, err), 1)
-	}
-	var level zerolog.Level
-	if err := level.UnmarshalText([]byte(value)); err != nil {
-		return cli.Exit(fmt.Errorf("invalid log level %q: %w", value, err), 1)
-	}
+func actionSetLogLevel(ctx *cli.Context, value string) error { _ = "STUB: not implemented"; return nil }
 
-	logger := zerolog.Ctx(ctx.Context).Level(level)
-	log.Logger = logger // Also update the default logger...
-	ctx.Context = logger.WithContext(ctx.Context)
+// Also update the default logger...
 
-	logLevelSet = true
-	logLevel = level
-	return nil
-}
+func actionSetLogFile(ctx *cli.Context, path string) error { _ = "STUB: not implemented"; return nil }
 
-func actionSetLogFile(ctx *cli.Context, path string) error {
-	if !filepath.IsAbs(path) {
-		if wd, err := os.Getwd(); err == nil {
-			path = filepath.Join(wd, path)
-		}
-	}
-	if err := os.Setenv(envVarOrchestrionLogFile, path); err != nil {
-		return cli.Exit(fmt.Errorf("setting environment %s: %w", envVarOrchestrionLogFile, err), 1)
-	}
-	filename := os.Expand(path, func(name string) string {
-		switch name {
-		case "PID":
-			return strconv.FormatInt(int64(os.Getpid()), 10)
-		default:
-			return "$" + name
-		}
-	})
-	if err := os.MkdirAll(filepath.Dir(filename), 0o755); err != nil {
-		return err
-	}
-	file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
-	if err != nil {
-		return err
-	}
-	origAfter := ctx.Command.After
-	ctx.Command.After = func(ctx *cli.Context) error {
-		var err error
-		if origAfter != nil {
-			err = origAfter(ctx)
-		}
-		return errors.Join(err, file.Close())
-	}
-
-	log.Logger = zerolog.New(file).With().Timestamp().Logger()
-	if !logLevelSet {
-		log.Logger = log.Logger.Level(zerolog.WarnLevel)
-	} else {
-		log.Logger = log.Logger.Level(logLevel)
-	}
-	log.Logger.UpdateContext(updateCommonContext)
-	ctx.Context = log.Logger.WithContext(ctx.Context)
-
-	return nil
-}
-
-func profilePath(path string, nameFormat string) string {
-	return filepath.Join(path, fmt.Sprintf(nameFormat, os.Getpid()))
-}
+func profilePath(path string, nameFormat string) string { _ = "STUB: not implemented"; return "" }
 
 func profileToFile(filename string, collect func(io.Writer) error) (*os.File, error) {
-	f, err := os.Create(filename)
-	if err != nil {
-		return nil, fmt.Errorf("creating file %s: %w", filename, err)
-	}
-	if err := collect(f); err != nil {
-		err = errors.Join(err, f.Close())
-		err = errors.Join(err, os.Remove(filename))
-		return nil, fmt.Errorf("starting collection: %w", err)
-	}
-	return f, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func startCPUProfiling(prefix string) (*os.File, error) {
-	filename := profilePath(prefix, "orchestrion-cpu-%d.pprof")
-	f, err := profileToFile(filename, pprof.StartCPUProfile)
-	if err != nil {
-		return nil, fmt.Errorf("starting CPU profiling: %w", err)
-	}
-	return f, nil
-}
+func startCPUProfiling(prefix string) (*os.File, error) { _ = "STUB: not implemented"; return nil, nil }
 
 func startExecutionTracing(prefix string) (*os.File, error) {
-	filename := profilePath(prefix, "orchestrion-%d.trace")
-	f, err := profileToFile(filename, trace.Start)
-	if err != nil {
-		return nil, fmt.Errorf("starting execution tracing: %w", err)
-	}
-	return f, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func updateCommonContext(c zerolog.Context) zerolog.Context {
-	c = c.Str("orchestrion", version.Tag())
-	c = c.Int("pid", os.Getpid())
-	c = c.Int("ppid", os.Getppid())
-	if val := os.Getenv(envVarToolexecImportPath); val != "" {
-		c = c.Str(envVarToolexecImportPath, val)
-	}
-	return c
+	_ = "STUB: not implemented"
+	return *new(zerolog.Context)
 }

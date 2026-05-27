@@ -8,17 +8,11 @@ package nbt
 import (
 	"context"
 	"errors"
-	"fmt"
-	"os"
-	"path/filepath"
 	"sync"
 	"sync/atomic"
 
-	"github.com/DataDog/orchestrion/internal/files"
-	"github.com/DataDog/orchestrion/internal/jobserver/common"
 	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
-	"github.com/rs/zerolog"
 )
 
 const (
@@ -47,42 +41,8 @@ type (
 )
 
 func Subscribe(ctx context.Context, conn *nats.Conn) (cleanup func(context.Context) error, resErr error) {
-	dir, err := os.MkdirTemp("", "orchestrion.nbt-*")
-	if err != nil {
-		return nil, fmt.Errorf("creating storage directory: %w", err)
-	}
-	defer func() {
-		if resErr == nil {
-			return
-		}
-		if err := os.RemoveAll(dir); err != nil {
-			resErr = errors.Join(resErr, err)
-		}
-	}()
-
-	s := &service{dir: dir}
-	_, err = conn.Subscribe(startSubject,
-		common.HandleRequest(
-			zerolog.Ctx(ctx).With().Str("nats.subject", startSubject).Logger().WithContext(ctx),
-			s.start,
-		),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = conn.Subscribe(finishSubject,
-		common.HandleRequest(
-			zerolog.Ctx(ctx).With().Str("nats.subject", finishSubject).Logger().WithContext(ctx),
-			s.finish,
-		),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	cleanup = func(context.Context) error { return os.RemoveAll(dir) }
-	return cleanup, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 type (
@@ -117,64 +77,33 @@ const (
 	LabelAsmhdr  Label = "go_asm.h"
 )
 
-func (StartRequest) Subject() string           { return startSubject }
-func (StartRequest) ResponseIs(*StartResponse) {}
+func (StartRequest) Subject() string           { _ = "STUB: not implemented"; return "" }
+func (StartRequest) ResponseIs(*StartResponse) { _ = "STUB: not implemented"; return }
 func (r StartRequest) ForeachSpanTag(set func(key string, value any)) {
-	set("request.importPath", r.ImportPath)
+	_ = "STUB: not implemented"
+	return
 }
 
 // cacheKey creates a composite key from importPath and buildID to support
 // different build configurations (e.g., with/without PGO) of the same package.
 // See: https://github.com/DataDog/orchestrion/issues/653
-func cacheKey(importPath string, buildID string) string {
-	return importPath + "\x00" + buildID
-}
+func cacheKey(importPath string, buildID string) string { _ = "STUB: not implemented"; return "" }
 
 func (s *service) start(ctx context.Context, req StartRequest) (*StartResponse, error) {
-	if req.ImportPath == "" || req.BuildID == "" {
-		return nil, fmt.Errorf("invalid request: %#v", req)
-	}
-
-	key := cacheKey(req.ImportPath, req.BuildID)
-	rawState, reused := s.state.LoadOrStore(key, &buildState{buildID: req.BuildID})
-	state, _ := rawState.(*buildState)
-
-	// Initialize the build state.
-	state.initOnce.Do(func() {
-		state.token = uuid.NewString()
-		// We use a cancellable context as a barrier here...
-		ctx, isDone := context.WithCancel(ctx)
-		state.done = ctx.Done()
-		state.onDone = isDone
-	})
-
-	// If the build state is re-used, wait for the original to complete...
-	if reused {
-		if state.buildID != req.BuildID {
-			return nil, fmt.Errorf("mismatched build ID for %q: %q != %q", req.ImportPath, state.buildID, req.BuildID)
-		}
-
-		zerolog.Ctx(ctx).Trace().Str("token", state.token).Str("import-path", req.ImportPath).Msg("Waiting for concurrent task to complete...")
-		defer zerolog.Ctx(ctx).Trace().Str("token", state.token).Str("import-path", req.ImportPath).Msg("Concurrent was completed!")
-
-		<-state.done
-		if state.error != nil {
-			return nil, state.error
-		}
-
-		if len(state.files) == 0 {
-			// The context has expired or the upstream context has been canceled.
-			// We'll return this as [context.Canceled] either way.
-			return nil, context.Canceled
-		}
-
-		return &StartResponse{Files: state.files}, nil
-	}
-
-	// Otherwise, return a finalization token, etc...
-	zerolog.Ctx(ctx).Trace().Str("token", state.token).Str("import-path", req.ImportPath).Msg("Compile task started")
-	return &StartResponse{FinishToken: state.token}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Initialize the build state.
+
+// We use a cancellable context as a barrier here...
+
+// If the build state is re-used, wait for the original to complete...
+
+// The context has expired or the upstream context has been canceled.
+// We'll return this as [context.Canceled] either way.
+
+// Otherwise, return a finalization token, etc...
 
 type (
 	// FinishRequest informs the job server about the result of a compilation
@@ -199,86 +128,21 @@ type (
 	}
 )
 
-func (FinishRequest) Subject() string            { return finishSubject }
-func (FinishRequest) ResponseIs(*FinishResponse) {}
+func (FinishRequest) Subject() string            { _ = "STUB: not implemented"; return "" }
+func (FinishRequest) ResponseIs(*FinishResponse) { _ = "STUB: not implemented"; return }
 func (r FinishRequest) ForeachSpanTag(set func(key string, value any)) {
-	set("request.importPath", r.ImportPath)
-	for label, path := range r.Files {
-		set(fmt.Sprintf("request.files.%s", label), path)
-	}
-	set("request.error", r.Error)
+	_ = "STUB: not implemented"
+	return
 }
 
 var errNoFilesNorError = errors.New("missing files, and no error reported")
 
 func (s *service) finish(ctx context.Context, req FinishRequest) (*FinishResponse, error) {
-	log := zerolog.Ctx(ctx).With().
-		Str("import-path", req.ImportPath).
-		Logger()
-	ctx = log.WithContext(ctx)
-
-	log.Trace().Any("request", req).Msg("Finish request received")
-
-	if req.ImportPath == "" || req.BuildID == "" || req.FinishToken == "" {
-		return nil, fmt.Errorf("invalid request: %#v", req)
-	}
-
-	key := cacheKey(req.ImportPath, req.BuildID)
-	rawState, found := s.state.Load(key)
-	if !found {
-		return nil, fmt.Errorf("no build started for %q", req.ImportPath)
-	}
-
-	state, _ := rawState.(*buildState)
-	if state.token != req.FinishToken {
-		log.Warn().
-			Str("expected", state.token).
-			Str("actual", req.FinishToken).
-			Msg("Invalid finish token")
-		return nil, fmt.Errorf("invalid finish token for %q: %q", req.ImportPath, req.FinishToken)
-	}
-
-	if !state.isDone.CompareAndSwap(false, true) {
-		log.Info().Msg("Task was already completed (concurrent retry?)")
-		return &FinishResponse{}, nil
-	}
-
-	defer state.onDone()
-	log.Debug().
-		Any("files", req.Files).
-		Any("error", req.Error).
-		Msg("Compile task finished")
-
-	if req.Error != nil {
-		state.error = errors.New(*req.Error)
-		return &FinishResponse{}, nil
-	}
-
-	if len(req.Files) == 0 {
-		state.error = errNoFilesNorError
-		return nil, state.error
-	}
-
-	// Use composite key for storage directory to support different build IDs (e.g., with/without PGO)
-	dir := filepath.Join(s.dir, uuid.NewSHA1(ns, []byte(cacheKey(req.ImportPath, req.BuildID))).String())
-	if err := os.Mkdir(dir, 0o755); err != nil {
-		state.error = fmt.Errorf("creating storage directory: %w", err)
-		return nil, state.error
-	}
-
-	state.files = make(map[Label]string, len(req.Files))
-	for label, path := range req.Files {
-		filename := filepath.Join(dir, string(label))
-		if err := files.Copy(ctx, path, filename); err != nil {
-			state.files = nil
-			state.error = fmt.Errorf("persisting additional file %q (%q): %w", path, label, err)
-			return nil, state.error
-		}
-		state.files[label] = filename
-	}
-
-	return &FinishResponse{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Use composite key for storage directory to support different build IDs (e.g., with/without PGO)
 
 // ns is an arbitrary UUID used as a namespace for hashing import paths when storing artifacts in
 // the temporary storage location.

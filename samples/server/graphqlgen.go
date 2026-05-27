@@ -9,30 +9,11 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/vektah/gqlparser/v2"
-	"github.com/vektah/gqlparser/v2/ast"
 )
 
-func Serve99Designs() {
-	schema := gqlparser.MustLoadSchema(&ast.Source{Input: `
-	type Query {
-		topLevel(id: String!): TopLevel!
-	}
-
-	type TopLevel {
-		nested(id: String!): String!
-	}
-`})
-
-	server := handler.New(&graphql.ExecutableSchemaMock{
-		ExecFunc:   execFunc,
-		SchemaFunc: func() *ast.Schema { return schema },
-	})
-	server.AddTransport(transport.POST{})
-}
+func Serve99Designs() { _ = "STUB: not implemented"; return }
 
 func execFunc(ctx context.Context) graphql.ResponseHandler {
-	return graphql.OneShot(graphql.ErrorResponse(ctx, "not implemented"))
+	_ = "STUB: not implemented"
+	return *new(graphql.ResponseHandler)
 }

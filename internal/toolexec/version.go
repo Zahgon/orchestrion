@@ -7,16 +7,8 @@ package toolexec
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"os/exec"
-	"strings"
 
-	"github.com/DataDog/orchestrion/internal/jobserver"
-	"github.com/DataDog/orchestrion/internal/jobserver/buildid"
-	"github.com/DataDog/orchestrion/internal/jobserver/client"
 	"github.com/DataDog/orchestrion/internal/toolexec/proxy"
-	"github.com/rs/zerolog"
 )
 
 // ComputeVersion returns the complete version string to be produced when the toolexec is invoked
@@ -28,35 +20,11 @@ import (
 // - the injector configuration is different
 // - injected dependencies versions are different
 func ComputeVersion(ctx context.Context, cmd proxy.Command) (string, error) {
-	log := zerolog.Ctx(ctx)
+	_ = "STUB: not implemented"
+	return "",
 
-	// Get the output of the raw `-V=full` invocation
-	stdout := strings.Builder{}
-	if err := proxy.RunCommand(ctx, cmd, func(cmd *exec.Cmd) { cmd.Stdout = &stdout }); err != nil {
-		return "", err
-	}
-
-	conn, err := client.FromEnvironment(ctx, "")
-	if err != nil {
-		if !errors.Is(err, client.ErrNoServerAvailable) {
-			return "", err
-		}
-		log.Debug().Msg("No job server available; starting an in-process temporary server...")
-		server, err := jobserver.New(ctx, &jobserver.Options{NoListener: true})
-		if err != nil {
-			return "", err
-		}
-		defer server.Shutdown()
-		if conn, err = server.Connect(); err != nil {
-			return "", err
-		}
-	}
-
-	res, err := client.Request(ctx, conn, buildid.VersionSuffixRequest{})
-	if err != nil {
-		return "", err
-	}
-
-	// Produce the complete version string
-	return fmt.Sprintf("%s:%s", strings.TrimSpace(stdout.String()), res), nil
+		// Get the output of the raw `-V=full` invocation
+		nil
 }
+
+// Produce the complete version string

@@ -6,30 +6,7 @@
 package main
 
 import (
-	"database/sql"
-	"log"
-
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func gormClient() {
-	sqlDB, err := sql.Open("sqlite3", "file::memory:?cache=shared")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer sqlDB.Close()
-
-	db, err := gorm.Open(postgres.New(postgres.Config{Conn: sqlDB}), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var user struct {
-		gorm.Model
-		Name string
-	}
-	db.Where("name = ?", "gorm.io").First(&user)
-}
+func gormClient() { _ = "STUB: not implemented"; return }

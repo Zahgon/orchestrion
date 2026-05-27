@@ -134,32 +134,17 @@ type ContextArgs struct {
 // returned by this function to allow for memory re-use, which can significantly
 // reduce allocations performed during AST traversal.
 func (n *NodeChain) Context(ctx gocontext.Context, args ContextArgs) *context {
-	c, _ := contextPool.Get().(*context)
-	*c = context{
-		log: zerolog.Ctx(ctx),
-
-		NodeChain: n,
-		cursor:    args.Cursor,
-
-		file:         args.File,
-		refMap:       args.RefMap,
-		minGoLang:    args.MinGoLang,
-		sourceParser: args.SourceParser,
-		importPath:   args.ImportPath,
-		testMain:     args.TestMain,
-		typeInfo:     args.TypeInfo,
-		nodeMap:      args.NodeMap,
-	}
-
-	return c
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Release returns the [*context] to the pool so that it can be reused later.
 // Proper use can significantly reduce memory allocations performed during AST
 // traversal.
 func (c *context) Release() {
-	*c = context{} // Zero it off
-	contextPool.Put(c)
+	_ = "STUB: not implemented"
+	// Zero it off
+	return
 }
 
 // Child returns a child context of this context, representing the provided node
@@ -168,182 +153,70 @@ func (c *context) Release() {
 // memory re-use, which can significantly reduce allocations performed during
 // AST traversal.
 func (c *context) Child(node dst.Node, property string, index int) AdviceContext {
-	r, _ := contextPool.Get().(*context)
-	*r = context{
-		log: c.log,
-
-		NodeChain: &NodeChain{
-			parent: c.NodeChain,
-			node:   node,
-			name:   property,
-			index:  index,
-		},
-		cursor:       nil,
-		file:         c.file,
-		refMap:       c.refMap,
-		minGoLang:    c.minGoLang,
-		sourceParser: c.sourceParser,
-		importPath:   c.importPath,
-		testMain:     c.testMain,
-		typeInfo:     c.typeInfo,
-		nodeMap:      c.nodeMap,
-	}
-
-	return r
+	_ = "STUB: not implemented"
+	return *new(AdviceContext)
 }
 
 // Chain returns the backing [*NodeChain] for this context. Using this to
 // traverse the current node's ancestry is more efficient than using
 // [context.Parent].
 func (c *context) Chain() *NodeChain {
-	return c.NodeChain
+	_ = "STUB: not implemented"
+
+	// Parent returns a new [*context] representing the parent of the current node.
+	// The [context.Release] function should be called on values returned by this
+	// function to allow for memory re-use, which can significantly reduce
+	// allocations performed during AST traversal.
+	return nil
 }
 
-// Parent returns a new [*context] representing the parent of the current node.
-// The [context.Release] function should be called on values returned by this
-// function to allow for memory re-use, which can significantly reduce
-// allocations performed during AST traversal.
-func (c *context) Parent() AspectContext {
-	parent := c.NodeChain.parent
-	if parent == nil {
-		return nil
-	}
+func (c *context) Parent() AspectContext { _ = "STUB: not implemented"; return *new(AspectContext) }
 
-	p, _ := contextPool.Get().(*context)
-	*p = context{
-		NodeChain:  parent,
-		file:       c.file,
-		refMap:     c.refMap,
-		importPath: c.importPath,
-		typeInfo:   c.typeInfo,
-		nodeMap:    c.nodeMap,
-	}
+func (c *context) ReplaceNode(newNode dst.Node) { _ = "STUB: not implemented"; return }
 
-	return p
-}
+func (c *context) File() *dst.File { _ = "STUB: not implemented"; return nil }
 
-func (c *context) ReplaceNode(newNode dst.Node) {
-	if c.cursor == nil {
-		panic("illegal attempt to replace a node without a cursor!")
-	}
-	c.cursor.Replace(newNode)
-	c.node = newNode
-}
+func (c *context) ImportPath() string { _ = "STUB: not implemented"; return "" }
 
-func (c *context) File() *dst.File {
-	return c.file
-}
+func (c *context) Package() string { _ = "STUB: not implemented"; return "" }
 
-func (c *context) ImportPath() string {
-	return c.importPath
-}
-
-func (c *context) Package() string {
-	return c.file.Name.Name
-}
-
-func (c *context) TestMain() bool {
-	return c.testMain
-}
+func (c *context) TestMain() bool { _ = "STUB: not implemented"; return false }
 
 func (c *context) ParseSource(bytes []byte) (*dst.File, error) {
-	return c.sourceParser.Parse(bytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (c *context) AddImport(path string, name string) bool {
-	nodeChain := []dst.Node{c.node}
-	for p := c.NodeChain.parent; p != nil; p = p.parent {
-		nodeChain = append(nodeChain, p.node)
-	}
+func (c *context) AddImport(path string, name string) bool { _ = "STUB: not implemented"; return false }
 
-	return c.refMap.AddImport(c.file, nodeChain, path, name)
-}
+func (c *context) AddLink(path string) bool { _ = "STUB: not implemented"; return false }
 
-func (c *context) AddLink(path string) bool {
-	return c.refMap.AddLink(c.file, path)
-}
-
-func (c *context) EnsureMinGoLang(lang GoLangVersion) {
-	c.minGoLang.SetAtLeast(lang)
-}
+func (c *context) EnsureMinGoLang(lang GoLangVersion) { _ = "STUB: not implemented"; return }
 
 // ResolveType resolves a dst.Expr to its corresponding types.Type within the
 // current context.
 func (c *context) ResolveType(expr dst.Expr) types.Type {
+	_ = "STUB: not implemented"
 	// Convert dst.Expr to ast.Expr using the nodeMap.
-	astNode, ok := c.nodeMap[expr]
-	if !ok {
-		return nil
-	}
-
-	// Convert ast.Node to ast.Expr.
-	astExpr, ok := astNode.(ast.Expr)
-	if !ok {
-		c.log.Error().Msgf("node %v is not an ast.Expr", astNode)
-		return nil
-	}
-
-	// Get the type from the typeInfo map.
-	if t, ok := c.typeInfo.Types[astExpr]; ok {
-		return t.Type
-	}
-
-	// For identifiers, try to get the type from Uses.
-	if astIdent, ok := astExpr.(*ast.Ident); ok {
-		if obj, ok := c.typeInfo.Uses[astIdent]; ok {
-			return obj.Type()
-		}
-	}
-
-	// For selector expressions (pkg.Type), try Uses on the selector.
-	if selExpr, ok := astExpr.(*ast.SelectorExpr); ok {
-		if obj, ok := c.typeInfo.Uses[selExpr.Sel]; ok {
-			return obj.Type()
-		}
-	}
-
-	// For star expressions (*Type), resolve the underlying type and return a pointer.
-	if starExpr, ok := astExpr.(*ast.StarExpr); ok {
-		// Find the dst.Expr corresponding to starExpr.X via reverse nodeMap lookup.
-		var dstX dst.Expr
-		for dNode, aNode := range c.nodeMap {
-			if aNode == starExpr.X {
-				if dExpr, ok := dNode.(dst.Expr); ok {
-					dstX = dExpr
-				}
-				break
-			}
-		}
-
-		if dstX != nil {
-			if underlying := c.ResolveType(dstX); underlying != nil {
-				return types.NewPointer(underlying)
-			}
-		} else {
-			// Fallback: if nodeMap reverse lookup failed (e.g., locally-defined types
-			// in function parameter position like *CustomContext), try typeInfo.Uses
-			// directly on the identifier.
-			if ident, ok := starExpr.X.(*ast.Ident); ok {
-				if obj, ok := c.typeInfo.Uses[ident]; ok {
-					return types.NewPointer(obj.Type())
-				}
-			}
-		}
-	}
-
-	// For index expressions (generic type instantiations like Type[T])
-	if indexExpr, ok := astExpr.(*ast.IndexExpr); ok {
-		if t, ok := c.typeInfo.Types[indexExpr]; ok {
-			return t.Type
-		}
-	}
-
-	// For index list expressions (generic types with multiple parameters like Type[T, U])
-	if indexListExpr, ok := astExpr.(*ast.IndexListExpr); ok {
-		if t, ok := c.typeInfo.Types[indexListExpr]; ok {
-			return t.Type
-		}
-	}
-
-	return nil
+	return *new(types.Type)
 }
+
+// Convert ast.Node to ast.Expr.
+
+// Get the type from the typeInfo map.
+
+// For identifiers, try to get the type from Uses.
+
+// For selector expressions (pkg.Type), try Uses on the selector.
+
+// For star expressions (*Type), resolve the underlying type and return a pointer.
+
+// Find the dst.Expr corresponding to starExpr.X via reverse nodeMap lookup.
+
+// Fallback: if nodeMap reverse lookup failed (e.g., locally-defined types
+// in function parameter position like *CustomContext), try typeInfo.Uses
+// directly on the identifier.
+
+// For index expressions (generic type instantiations like Type[T])
+
+// For index list expressions (generic types with multiple parameters like Type[T, U])

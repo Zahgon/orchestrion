@@ -5,16 +5,4 @@
 
 package main
 
-import (
-	"net/http"
-
-	"github.com/go-chi/chi/v5"
-)
-
-func chiV5Server() {
-	router := chi.NewRouter()
-	router.Get("/", func(w http.ResponseWriter, _ *http.Request) {
-		w.Write([]byte("Hello World!\n"))
-	})
-	http.ListenAndServe(":8080", router)
-}
+func chiV5Server() { _ = "STUB: not implemented"; return }

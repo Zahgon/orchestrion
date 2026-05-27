@@ -20,34 +20,28 @@ import (
 type configuration map[string]string
 
 func Configuration(requirements map[string]string) configuration {
-	return configuration(requirements)
+	_ = "STUB: not implemented"
+	return *new(configuration)
 }
 
-func (configuration) ImpliesImported() []string {
-	return nil
-}
+func (configuration) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
 
 func (configuration) PackageMayMatch(_ *may.PackageContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (configuration) FileMayMatch(_ *may.FileContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (jp configuration) Matches(ctx context.AspectContext) bool {
-	for k, v := range jp {
-		cfg, found := ctx.Config(k)
-		if !found || cfg != v {
-			return false
-		}
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (jp configuration) Hash(h *fingerprint.Hasher) error {
-	return h.Named("configuration", fingerprint.Map(jp, func(k string, v string) (string, fingerprint.String) { return k, fingerprint.String(v) }))
-}
+func (jp configuration) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	unmarshalers["configuration"] = func(ctx gocontext.Context, node ast.Node) (Point, error) {

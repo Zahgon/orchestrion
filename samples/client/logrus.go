@@ -5,9 +5,4 @@
 
 package main
 
-import "github.com/sirupsen/logrus"
-
-func SampleLogrus() {
-	logger := &logrus.Logger{}
-	logger.Infoln("info")
-}
+func SampleLogrus() { _ = "STUB: not implemented"; return }

@@ -7,11 +7,9 @@ package injector
 
 import (
 	"context"
-	"strings"
 	"sync"
 
 	"github.com/dave/dst"
-	"github.com/rs/zerolog"
 )
 
 const (
@@ -22,18 +20,4 @@ const (
 var warnOnce sync.Once
 
 // isIgnored returns true if the node is prefixed by an `//orchestrion:ignore` (or the legacy `//dd:ignore`) directive.
-func isIgnored(ctx context.Context, node dst.Node) bool {
-	for _, cmt := range node.Decorations().Start.All() {
-		if cmt == orchestrionIgnore || strings.HasPrefix(cmt, orchestrionIgnore+" ") {
-			return true
-		}
-		if cmt == ddIgnore || strings.HasPrefix(cmt, ddIgnore+" ") {
-			warnOnce.Do(func() {
-				log := zerolog.Ctx(ctx)
-				log.Warn().Msg("The " + ddIgnore + " directive is deprecated and may be removed in a future release of orchestrion. Please use " + orchestrionIgnore + " instead.")
-			})
-			return true
-		}
-	}
-	return false
-}
+func isIgnored(ctx context.Context, node dst.Node) bool { _ = "STUB: not implemented"; return false }

@@ -6,8 +6,6 @@
 package traceutil
 
 import (
-	"strings"
-
 	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 )
 
@@ -21,38 +19,12 @@ var _ tracer.TextMapWriter = (*EnvVarCarrier)(nil)
 const envVarPrefix = "DD_X_"
 
 func (c EnvVarCarrier) ForeachKey(handler func(key string, val string) error) error {
-	for _, val := range *c.Env {
-		if !strings.HasPrefix(val, envVarPrefix) {
-			continue
-		}
-
-		key, val, _ := strings.Cut(val, "=")
-		key = headerStyle(key)
-		if err := handler(key, val); err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (c EnvVarCarrier) Set(key string, value string) {
-	varName := envVarStyle(key)
-	for idx, val := range *c.Env {
-		if strings.HasPrefix(val, varName+"=") {
-			(*c.Env)[idx] = varName + "=" + value
-			return
-		}
-	}
-	*c.Env = append(*c.Env, varName+"="+value)
-}
+func (c EnvVarCarrier) Set(key string, value string) { _ = "STUB: not implemented"; return }
 
-func envVarStyle(key string) string {
-	key = strings.ToUpper(key)
-	return envVarPrefix + strings.ReplaceAll(key, "-", "_")
-}
+func envVarStyle(key string) string { _ = "STUB: not implemented"; return "" }
 
-func headerStyle(key string) string {
-	key = strings.TrimPrefix(key, envVarPrefix)
-	key = strings.ToLower(key)
-	return strings.ReplaceAll(key, "_", "-")
-}
+func headerStyle(key string) string { _ = "STUB: not implemented"; return "" }

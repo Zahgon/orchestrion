@@ -7,60 +7,9 @@ package main
 
 import (
 	"context"
-	"log"
 	"net/http"
-	"net/url"
-	"strings"
 )
 
-func shortHandsWithContext(context.Context) {
-	resp, err := http.Get("http://localhost:8080")
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp.Body.Close()
+func shortHandsWithContext(context.Context) { _ = "STUB: not implemented"; return }
 
-	resp, err = http.Head("http://localhost:8080")
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp.Body.Close()
-
-	resp, err = http.Post("http://localhost:8080", "text/plain", strings.NewReader("Body"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp.Body.Close()
-
-	resp, err = http.PostForm("http://localhost:8080", url.Values{"key": {"value"}})
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp.Body.Close()
-}
-
-func shortHandsWithRequest(_ *http.Request /* for context */) {
-	resp, err := http.Get("http://localhost:8080")
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp.Body.Close()
-
-	resp, err = http.Head("http://localhost:8080")
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp.Body.Close()
-
-	resp, err = http.Post("http://localhost:8080", "text/plain", strings.NewReader("Body"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp.Body.Close()
-
-	resp, err = http.PostForm("http://localhost:8080", url.Values{"key": {"value"}})
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp.Body.Close()
-}
+func shortHandsWithRequest(_ *http.Request /* for context */) { _ = "STUB: not implemented"; return }

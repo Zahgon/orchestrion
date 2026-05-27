@@ -18,6 +18,4 @@ package code
 // NOTE: This file is a hand-written companion to the auto-generated
 // dot_ast.proxies.go. Any future hand-written extensions to generated proxy
 // types should be added here to keep them separate from generated code.
-func (p *proxySelectorExpr) Name() string {
-	return p.SelectorExpr.Sel.Name
-}
+func (p *proxySelectorExpr) Name() string { _ = "STUB: not implemented"; return "" }

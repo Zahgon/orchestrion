@@ -5,10 +5,6 @@
 
 package aspect
 
-import (
-	"strings"
-)
-
 // weavingSpecialCase defines special behavior to be applied to certain package
 // paths. They are evaluated in order, and the first matching override is
 // applied, stopping evaluation of any further overrides.
@@ -49,16 +45,10 @@ const (
 )
 
 // Matches returns true if the importPath is matched by this special case
-func (sc *specialCase) matches(importPath string) bool {
-	return importPath == sc.path || sc.prefix && strings.HasPrefix(importPath, sc.path+"/")
-}
+func (sc *specialCase) matches(importPath string) bool { _ = "STUB: not implemented"; return false }
 
 // FindBehaviorOverride checks the import path against the weaver special cases and returns a potential special case
 func FindBehaviorOverride(importPath string) (BehaviorOverride, bool) {
-	for _, sc := range weavingSpecialCase {
-		if sc.matches(importPath) {
-			return sc.behavior, true
-		}
-	}
-	return NoOverride, false
+	_ = "STUB: not implemented"
+	return *new(BehaviorOverride), false
 }

@@ -8,11 +8,8 @@ package join
 import (
 	gocontext "context"
 	"errors"
-	"path"
-	"strings"
 
 	"github.com/DataDog/orchestrion/internal/fingerprint"
-	"github.com/DataDog/orchestrion/internal/goenv"
 	"github.com/DataDog/orchestrion/internal/injector/aspect/context"
 	"github.com/DataDog/orchestrion/internal/injector/aspect/may"
 	"github.com/DataDog/orchestrion/internal/yaml"
@@ -21,63 +18,55 @@ import (
 
 type importPath string
 
-func ImportPath(name string) importPath {
-	return importPath(name)
-}
+func ImportPath(name string) importPath { _ = "STUB: not implemented"; return *new(importPath) }
 
-func (p importPath) ImpliesImported() []string {
-	return []string{string(p)} // Technically the current package in this instance
-}
+func (p importPath) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
+
+// Technically the current package in this instance
 
 func (p importPath) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	if ctx.ImportPath == string(p) {
-		return may.Match
-	}
-
-	return may.NeverMatch
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (importPath) FileMayMatch(_ *may.FileContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (p importPath) Matches(ctx context.AspectContext) bool {
-	return ctx.ImportPath() == string(p)
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (p importPath) Hash(h *fingerprint.Hasher) error {
-	return h.Named("import-path", fingerprint.String(p))
-}
+func (p importPath) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 type packageName string
 
-func PackageName(name string) packageName {
-	return packageName(name)
-}
+func PackageName(name string) packageName { _ = "STUB: not implemented"; return *new(packageName) }
 
 func (packageName) ImpliesImported() []string {
-	return nil // Can't assume anything here...
+	_ = "STUB: not implemented"
+	// Can't assume anything here...
+	return nil
 }
 
 func (packageName) PackageMayMatch(_ *may.PackageContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (p packageName) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	if ctx.PackageName == string(p) {
-		return may.Match
-	}
-
-	return may.NeverMatch
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (p packageName) Matches(ctx context.AspectContext) bool {
-	return ctx.Package() == string(p)
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (p packageName) Hash(h *fingerprint.Hasher) error {
-	return h.Named("import-path", fingerprint.String(p))
-}
+func (p packageName) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 type packageFilter struct {
 	root    bool   // true if targeting the root module only, false for global matching
@@ -102,227 +91,85 @@ type packageFilter struct {
 //	PackageFilter(false, "**/internal/*")    - matches internal packages at any depth
 //	PackageFilter(false, "github.com/myorg/**") - matches any package under myorg
 func PackageFilter(root bool, pattern string) packageFilter {
-	return packageFilter{root: root, pattern: pattern}
+	_ = "STUB: not implemented"
+	return *new(packageFilter)
 }
 
 // globMatch extends path.Match to support ** (globstar) patterns.
 func globMatch(pattern string, importPath string) (bool, error) {
-	if !strings.Contains(pattern, "**") {
-		return path.Match(pattern, importPath)
-	}
-
-	return matchWithGlobstar(pattern, importPath)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // matchWithGlobstar handles patterns containing ** using segment-by-segment matching.
 func matchWithGlobstar(pattern string, importPath string) (bool, error) {
-	if pattern == "**" {
-		return true, nil
-	}
-
-	patternSegments := strings.Split(pattern, "/")
-	pathSegments := strings.Split(importPath, "/")
-
-	return matchSegments(expandGlobstarSegments(patternSegments), pathSegments)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // expandGlobstarSegments processes pattern segments to handle ** within segments.
 // For example, "service**" becomes ["service*", "**"]
 func expandGlobstarSegments(patternSegments []string) []string {
-	var expanded []string
-
-	for _, segment := range patternSegments {
-		expanded = append(expanded, expandSingleSegment(segment)...)
-	}
-
-	return expanded
-}
-
-// expandSingleSegment handles the expansion logic for a single pattern segment
-func expandSingleSegment(segment string) []string {
-	if segment == "**" {
-		// Pure globstar segment, keep as is.
-		return []string{segment}
-	}
-
-	if prefix, found := strings.CutSuffix(segment, "**"); found && prefix != "" {
-		// Mixed segment like "service**", split it.
-		return []string{prefix + "*", "**"}
-	}
-
-	if suffix, found := strings.CutPrefix(segment, "**"); found && suffix != "" {
-		// Mixed segment like "**service", split it.
-		return []string{"**", "*" + suffix}
-	}
-
-	if strings.Contains(segment, "**") {
-		// Handle ** in the middle of a segment by splitting around it.
-		return expandMiddleGlobstar(segment)
-	}
-
-	// Regular segment, keep as is.
-	return []string{segment}
-}
-
-// expandMiddleGlobstar handles segments with ** in the middle
-func expandMiddleGlobstar(segment string) []string {
-	var (
-		result []string
-		parts  = strings.Split(segment, "**")
-	)
-	for i, part := range parts {
-		if i > 0 {
-			result = append(result, "**")
-		}
-		if part != "" {
-			switch {
-			case i == 0:
-				result = append(result, part+"*")
-			case i == len(parts)-1:
-				result = append(result, "*"+part)
-			default:
-				result = append(result, "*"+part+"*")
-			}
-		}
-	}
-
-	return result
-}
-
-func matchSegments(patternSegments []string, pathSegments []string) (bool, error) {
-	patternIdx, pathIdx := 0, 0
-
-	for patternIdx < len(patternSegments) {
-		if patternSegments[patternIdx] == "**" {
-			if patternIdx == len(patternSegments)-1 {
-				return true, nil
-			}
-
-			for pathIdx <= len(pathSegments) {
-				matched, err := matchSegments(patternSegments[patternIdx+1:], pathSegments[pathIdx:])
-				if err != nil {
-					return false, err
-				}
-				if matched {
-					return true, nil
-				}
-				pathIdx++
-			}
-			return false, nil
-		}
-
-		if pathIdx >= len(pathSegments) {
-			return false, nil
-		}
-
-		matched, err := path.Match(patternSegments[patternIdx], pathSegments[pathIdx])
-		if err != nil {
-			return false, err
-		}
-		if !matched {
-			return false, nil
-		}
-
-		patternIdx++
-		pathIdx++
-	}
-
-	return pathIdx == len(pathSegments), nil
-}
-
-func (_ packageFilter) ImpliesImported() []string {
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// expandSingleSegment handles the expansion logic for a single pattern segment
+func expandSingleSegment(segment string) []string { _ = "STUB: not implemented"; return nil }
+
+// Pure globstar segment, keep as is.
+
+// Mixed segment like "service**", split it.
+
+// Mixed segment like "**service", split it.
+
+// Handle ** in the middle of a segment by splitting around it.
+
+// Regular segment, keep as is.
+
+// expandMiddleGlobstar handles segments with ** in the middle
+func expandMiddleGlobstar(segment string) []string { _ = "STUB: not implemented"; return nil }
+
+func matchSegments(patternSegments []string, pathSegments []string) (bool, error) {
+	_ = "STUB: not implemented"
+	return false, nil
+}
+
+func (_ packageFilter) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
+
 func (pf packageFilter) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	if pf.matchesPattern(ctx.ImportPath) {
-		return may.Match
-	}
-	return may.NeverMatch
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (_ packageFilter) FileMayMatch(_ *may.FileContext) may.MatchType {
-	return may.Unknown
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (pf packageFilter) Matches(ctx context.AspectContext) bool {
-	return pf.matchesPattern(ctx.ImportPath())
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (pf packageFilter) Hash(h *fingerprint.Hasher) error {
-	return h.Named("package-filter",
-		fingerprint.Bool(pf.root),
-		fingerprint.String(pf.pattern),
-	)
-}
+func (pf packageFilter) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func (pf packageFilter) matchesPattern(importPath string) bool {
-	if importPath == "" {
-		return false
-	}
-
-	// For root-only filters without pattern, match all packages in root module.
-	if pf.pattern == "" && pf.root {
-		return isInRootModule(importPath)
-	}
-
-	if pf.pattern == "" {
-		return false
-	}
-
-	targetPath := importPath
-	if pf.root {
-		rootModulePath, err := goenv.RootModulePath(gocontext.Background())
-		if err != nil {
-			return false
-		}
-
-		if !isInRootModule(importPath) {
-			return false
-		}
-
-		targetPath = getRelativePathInModule(importPath, rootModulePath)
-	}
-
-	if pf.pattern == "*" {
-		return true
-	}
-
-	matched, err := globMatch(pf.pattern, targetPath)
-	if err != nil {
-		return false
-	}
-	return matched
+	_ = "STUB: not implemented"
+	return false
 }
+
+// For root-only filters without pattern, match all packages in root module.
 
 // isInRootModule checks if the given import path belongs to the root module.
-func isInRootModule(importPath string) bool {
-	rootPath, err := goenv.RootModulePath(gocontext.Background())
-	if err != nil {
-		return false // If we can't determine, assume it doesn't match
-	}
+func isInRootModule(importPath string) bool { _ = "STUB: not implemented"; return false }
 
-	if importPath == rootPath {
-		return true
-	}
-	return strings.HasPrefix(importPath, rootPath+"/")
-}
+// If we can't determine, assume it doesn't match
 
 // getRelativePathInModule returns the relative path of an import path within its module.
 func getRelativePathInModule(importPath string, rootModulePath string) string {
-	if importPath == rootModulePath {
-		return "."
-	}
-
-	if importPath == rootModulePath || strings.HasPrefix(importPath, rootModulePath+"/") {
-		relative := importPath[len(rootModulePath):]
-		if len(relative) > 0 && relative[0] == '/' {
-			relative = relative[1:]
-		}
-		return relative
-	}
-
-	return importPath
+	_ = "STUB: not implemented"
+	return ""
 }
 
 func init() {

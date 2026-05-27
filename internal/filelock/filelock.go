@@ -7,10 +7,7 @@ package filelock
 
 import (
 	"context"
-	"errors"
 	"os"
-
-	"github.com/rs/zerolog"
 )
 
 // Mutex is a file-based mutex intended to facilitate cross-process
@@ -51,109 +48,28 @@ const (
 
 // MutexAt returns a new Mutex instance that will use the given path as the lock
 // file.
-func MutexAt(path string) *Mutex {
-	return &Mutex{path: path}
-}
+func MutexAt(path string) *Mutex { _ = "STUB: not implemented"; return nil }
 
 // RLock attempts to lock the file for reading. It blocks until the lock is
 // acquired, or an error happens. If the file is already locked for writing, it
 // will downgrade the lock to a read-only lock.
-func (m *Mutex) RLock(ctx context.Context) error {
-	if m.file == nil {
-		f, err := m.open()
-		if err != nil {
-			return err
-		}
-		m.file = f
-	}
+func (m *Mutex) RLock(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-	log := zerolog.Ctx(ctx)
-	if cont, err := m.beforeLockChange(ctx, lockStateRLocked); err != nil {
-		log.Error().Err(err).Str("lock-file", m.path).Msg("Before lock change hook rejected action")
-		return err
-	} else if !cont {
-		// Idempotent success!
-		log.Trace().Str("lock-file", m.path).Msg("Before lock change hook detected idempotent operation")
-		return nil
-	}
-
-	if err := rlock(m.file); err != nil {
-		return err
-	}
-
-	log.Trace().Str("lock-file", m.path).Msg("Successfully acquired READ lock")
-	m.locked = lockStateRLocked
-	return nil
-}
+// Idempotent success!
 
 // Lock attempts to lock the file for reading & writing. It blocks until the
 // lock is acquired, or an error happens. If the file is already locked for
 // reading, it will upgrade the lock to a read-write lock.
-func (m *Mutex) Lock(ctx context.Context) error {
-	if m.file == nil {
-		f, err := m.open()
-		if err != nil {
-			return err
-		}
-		m.file = f
-	}
+func (m *Mutex) Lock(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-	log := zerolog.Ctx(ctx)
-	if cont, err := m.beforeLockChange(ctx, lockStateWLocked); err != nil {
-		log.Error().Err(err).Str("lock-file", m.path).Msg("Before lock change hook rejected action")
-		return err
-	} else if !cont {
-		// Idempotent success!
-		log.Trace().Str("lock-file", m.path).Msg("Before lock change hook detected idempotent operation")
-		return nil
-	}
-
-	if err := lock(m.file); err != nil {
-		return err
-	}
-
-	log.Trace().Str("lock-file", m.path).Msg("Successfully acquired WRITE lock")
-	m.locked = lockStateWLocked
-	return nil
-}
+// Idempotent success!
 
 // Unlock releases any lock acquired on the file.
-func (m *Mutex) Unlock(ctx context.Context) error {
-	if m.file == nil {
-		return nil
-	}
-
-	if err := m.unlock(ctx); err != nil {
-		return err
-	}
-
-	err := m.file.Close()
-	if err == nil {
-		m.file = nil
-	}
-	return err
-}
+func (m *Mutex) Unlock(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
 // unlock releases the lock currently held on the file, but does not close it. This function is only
 // safe to call if `m.file` is not `nil` (after [Mutex.open] was called, but before [Mutex.Unlock]
 // is).
-func (m *Mutex) unlock(ctx context.Context) error {
-	log := zerolog.Ctx(ctx)
+func (m *Mutex) unlock(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-	if err := unlock(m.file); err != nil {
-		log.Error().Err(err).Str("lock-file", m.path).Msg("Failed to unlock file")
-		return err
-	}
-
-	log.Trace().Str("lock-file", m.path).Msg("Successfully unlocked file")
-	m.locked = lockStateUnlocked
-	return nil
-}
-
-func (m *Mutex) open() (*os.File, error) {
-	if m.file != nil {
-		return nil, errors.New("already opened")
-	}
-
-	return os.OpenFile(m.path, os.O_CREATE|os.O_RDWR, 0o644)
-}
+func (m *Mutex) open() (*os.File, error) { _ = "STUB: not implemented"; return nil, nil }

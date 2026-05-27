@@ -7,7 +7,6 @@ package code
 
 import (
 	"regexp"
-	"strings"
 )
 
 // DirectiveArgument represents arguments provided to directives (`//<directive> <args...>`), where
@@ -23,24 +22,8 @@ var spaces = regexp.MustCompile(`\s+`)
 // comment with the directive immediately following the leading `//`, without any spacing in
 // between; followed by optional arguments formatted as `key:value`, separated by spaces.
 func (d *dot) DirectiveArgs(directive string) (args []DirectiveArgument) {
-	prefix := "//" + directive
-
-	for curr := d.context.Chain(); curr != nil; curr = curr.Parent() {
-		for _, dec := range curr.Node().Decorations().Start {
-			if !strings.HasPrefix(dec, prefix) {
-				continue
-			}
-			parts := spaces.Split(dec, -1)
-			if parts[0] != prefix {
-				// This is not the directive we're looking for -- its name only starts the same.
-				continue
-			}
-			for _, part := range parts[1:] {
-				key, value, _ := strings.Cut(part, ":")
-				args = append(args, DirectiveArgument{Key: key, Value: value})
-			}
-			return
-		}
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// This is not the directive we're looking for -- its name only starts the same.

@@ -6,31 +6,13 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/labstack/echo/v4"
 )
 
-func echoV4Server() {
-	r := echo.New()
-	r.GET("/ping", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, map[string]any{
-			"message": "pong",
-		})
-	})
-	_ = r.Start(":8080")
-}
+func echoV4Server() { _ = "STUB: not implemented"; return }
 
 type api struct {
 	srv *echo.Echo
 }
 
-func (a *api) echoV4Server() {
-	a.srv = echo.New()
-	a.srv.GET("/ping", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, map[string]any{
-			"message": "pong",
-		})
-	})
-	_ = a.srv.Start(":8888")
-}
+func (a *api) echoV4Server() { _ = "STUB: not implemented"; return }

@@ -299,17 +299,6 @@ func main() {
 	}
 }
 
-func (f *flagSpec) String() string {
-	if f.Value != "" {
-		return fmt.Sprintf("%s %s", f.Flag, f.Value)
-	}
-	return f.Flag
-}
+func (f *flagSpec) String() string { _ = "STUB: not implemented"; return "" }
 
-func requireEnv(name string) string {
-	val := os.Getenv(name)
-	if val == "" {
-		log.Fatalf("Missing environment variable: $%s\n", name)
-	}
-	return val
-}
+func requireEnv(name string) string { _ = "STUB: not implemented"; return "" }

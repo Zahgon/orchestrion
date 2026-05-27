@@ -6,7 +6,6 @@
 package yaml
 
 import (
-	"bytes"
 	"context"
 	"io"
 
@@ -24,22 +23,18 @@ type (
 // NewDecoderContext creates a new [yaml.Decoder] and binds it to the given
 // [context.Context].
 func NewDecoderContext(ctx context.Context, rd io.Reader, opts ...yaml.DecodeOption) (context.Context, *yaml.Decoder) {
-	dec := yaml.NewDecoder(rd, opts...)
-	return context.WithValue(ctx, decoderContextKey{}, dec), dec
+	_ = "STUB: not implemented"
+	return *new(context.Context), nil
 }
 
 // UnmarshalYAML unmarshals from the given reader.
 func UnmarshalContext(ctx context.Context, rd io.Reader, val any) error {
-	ctx, dec := NewDecoderContext(ctx, rd)
-	return dec.DecodeContext(ctx, val)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NodeToValueContext unmarshals from the given node.
 func NodeToValueContext(ctx context.Context, node ast.Node, val any) error {
-	dec, _ := ctx.Value(decoderContextKey{}).(*yaml.Decoder)
-	if dec == nil {
-		var buf bytes.Buffer
-		dec = yaml.NewDecoder(&buf)
-	}
-	return dec.DecodeFromNodeContext(ctx, node, val)
+	_ = "STUB: not implemented"
+	return nil
 }

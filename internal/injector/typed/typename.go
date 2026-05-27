@@ -6,7 +6,6 @@
 package typed
 
 import (
-	"fmt"
 	"regexp"
 
 	"github.com/dave/dst"
@@ -46,125 +45,51 @@ var typeNameRe = regexp.MustCompile(`\A(\*)?\s*(?:([A-Za-z0-9_.-]+(?:/[A-Za-z0-9
 // NewTypeName parses a string representation of a type name into a TypeName struct.
 // It returns an error if the syntax is invalid according to its limited regular expression.
 func NewTypeName(n string) (tn TypeName, err error) {
-	matches := typeNameRe.FindStringSubmatch(n)
-	if matches == nil {
-		err = fmt.Errorf("invalid TypeName syntax: %q", n)
-		return tn, err
-	}
-
-	tn.Pointer = matches[1] == "*"
-	tn.ImportPath = matches[2]
-	tn.Name = matches[3]
-	return tn, nil
+	_ = "STUB: not implemented"
+	return *new(TypeName), nil
 }
 
 // MustTypeName is the same as NewTypeName, except it panics in case of an error.
-func MustTypeName(n string) (tn TypeName) {
-	var err error
-	if tn, err = NewTypeName(n); err != nil {
-		panic(err)
-	}
-	return tn
-}
+func MustTypeName(n string) (tn TypeName) { _ = "STUB: not implemented"; return *new(TypeName) }
 
 // Matches determines whether the provided AST expression node represents the same type
 // as this TypeName. This performs a structural comparison based on the limited types
 // supported by the parsing regex (identifiers, selectors, pointers, empty interface).
-func (n TypeName) Matches(node dst.Expr) bool {
-	switch node := node.(type) {
-	case *dst.Ident:
-		return !n.Pointer && n.ImportPath == node.Path && n.Name == node.Name
+func (n TypeName) Matches(node dst.Expr) bool { _ = "STUB: not implemented"; return false }
 
-	case *dst.SelectorExpr:
-		var path string
-		if ident, ok := node.X.(*dst.Ident); ok && ident.Path == "" {
-			path = ident.Name
-		} else {
-			return false
-		}
-		return !n.Pointer && n.ImportPath == path && n.Name == node.Sel.Name
+// Handle generic types with single type parameter (e.g., MyType[T])
 
-	case *dst.StarExpr:
-		return n.Pointer && (&TypeName{ImportPath: n.ImportPath, Name: n.Name}).Matches(node.X)
+// Handle generic types with multiple type parameters (e.g., MyType[T, U])
 
-	case *dst.IndexExpr:
-		// Handle generic types with single type parameter (e.g., MyType[T])
-		return !n.Pointer && n.Matches(node.X)
-
-	case *dst.IndexListExpr:
-		// Handle generic types with multiple type parameters (e.g., MyType[T, U])
-		return !n.Pointer && n.Matches(node.X)
-
-	case *dst.InterfaceType:
-		// We only match the empty interface (as "any")
-		if len(node.Methods.List) != 0 {
-			return false
-		}
-		return n.ImportPath == "" && n.Name == "any"
-
-	default:
-		return false
-	}
-}
+// We only match the empty interface (as "any")
 
 // MatchesDefinition determines whether the provided node matches the definition
 // of this TypeName. The `importPath` argument determines the context in which
 // the assertion is made.
 func (n TypeName) MatchesDefinition(node dst.Expr, importPath string) bool {
-	if n.ImportPath != importPath {
-		return false
-	}
-	return (&TypeName{Name: n.Name, Pointer: n.Pointer}).Matches(node)
+	_ = "STUB: not implemented"
+	return false
 }
 
 // AsNode converts the TypeName back into a dst.Expr AST node.
 // Useful for generating code that refers to this type.
-func (n *TypeName) AsNode() dst.Expr {
-	ident := dst.NewIdent(n.Name)
-	ident.Path = n.ImportPath
-	if n.Pointer {
-		return &dst.StarExpr{X: ident}
-	}
-	return ident
-}
+func (n *TypeName) AsNode() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 // Hash contributes the TypeName's properties to a fingerprint hasher.
-func (n TypeName) Hash(h *fingerprint.Hasher) error {
-	return h.Named(
-		"type-name",
-		fingerprint.String(n.Name),
-		fingerprint.String(n.ImportPath),
-		fingerprint.Bool(n.Pointer),
-	)
-}
+func (n TypeName) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 // FindMatchingTypeName parses a type name string and searches a field list for the first field whose type matches.
 // It returns the index of the matching field and whether a match was found.
 // The index accounts for fields with multiple names.
 func FindMatchingTypeName(fields *dst.FieldList, typeNameStr string) (index int, found bool) {
-	if fields == nil || len(fields.List) == 0 {
-		return -1, false
-	}
-
-	tn, err := NewTypeName(typeNameStr)
-	if err != nil {
-		// If the type name string is invalid, we can't match it.
-		return -1, false
-	}
-
-	currentIndex := 0
-	for _, field := range fields.List {
-		if tn.Matches(field.Type) {
-			return currentIndex, true // Found a match.
-		}
-
-		// Increment index by the number of names in the field (or 1 if unnamed).
-		count := len(field.Names)
-		if count == 0 {
-			count = 1
-		}
-		currentIndex += count
-	}
-
-	return -1, false // No match found
+	_ = "STUB: not implemented"
+	return 0, false
 }
+
+// If the type name string is invalid, we can't match it.
+
+// Found a match.
+
+// Increment index by the number of names in the field (or 1 if unnamed).
+
+// No match found

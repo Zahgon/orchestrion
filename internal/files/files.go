@@ -7,40 +7,10 @@ package files
 
 import (
 	"context"
-	"fmt"
-	"io"
-	"os"
-
-	"github.com/rs/zerolog"
 )
 
 // Copy creates a copy of `oldname` at `newname`.
 func Copy(ctx context.Context, oldname string, newname string) error {
-	log := zerolog.Ctx(ctx).With().
-		Str("oldname", oldname).
-		Str("newname", newname).
-		Logger()
-
-	in, err := os.Open(oldname)
-	if err != nil {
-		return fmt.Errorf("open %q: %w", oldname, err)
-	}
-	defer in.Close()
-
-	out, err := os.Create(newname)
-	if err != nil {
-		return fmt.Errorf("create %q: %w", newname, err)
-	}
-	defer out.Close()
-
-	bytes, err := io.Copy(out, in)
-	if err != nil {
-		return fmt.Errorf("copy %q to %q: %w", oldname, newname, err)
-	}
-
-	log.Trace().
-		Int64("size", bytes).
-		Msg("Successfully copied file over")
-
+	_ = "STUB: not implemented"
 	return nil
 }

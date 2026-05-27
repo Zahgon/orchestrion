@@ -7,15 +7,8 @@ package ensure
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"path/filepath"
 	"runtime"
-
-	"github.com/DataDog/orchestrion/internal/goenv"
-	"github.com/DataDog/orchestrion/internal/version"
-	"github.com/rs/zerolog"
-	"golang.org/x/tools/go/packages"
 )
 
 const orchestrionPkgPath = "github.com/DataDog/orchestrion"
@@ -36,20 +29,9 @@ type IncorrectVersionError struct {
 // If this returns `nil`, the current process is running the correct version of the tool and can
 // proceed with it's intended purpose. If it returns an [IncorrectVersionError], the caller should
 // determine whether to print a warning or exit in error, presenting the returned error to the user.
-func RequiredVersion(ctx context.Context) error {
-	return requiredVersion(ctx, goModVersion)
-}
+func RequiredVersion(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-func (e IncorrectVersionError) Error() string {
-	if e.RequiredVersion == "" {
-		return "orchestrion is diverted by a replace directive; please run `go install github.com/DataDog/orchestrion` before trying again"
-	}
-	return fmt.Sprintf(
-		"orchestrion@%s is required by `go.mod`, but this is orchestrion@%s - please run `go install github.com/DataDog/orchestrion@%[1]s` before trying again",
-		e.RequiredVersion,
-		version.Tag(),
-	)
-}
+func (e IncorrectVersionError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // requiredVersion is the internal implementation of RequiredVersion, and takes the goModVersion and
 // syscall.Exec functions as arguments to allow for easier testing. Panics if `osArgs` is 0-length.
@@ -57,65 +39,28 @@ func requiredVersion(
 	ctx context.Context,
 	goModVersion func(context.Context, string) (string, string, error),
 ) error {
-	rVersion, path, err := goModVersion(ctx, "" /* Current working directory */)
-	if err != nil {
-		return fmt.Errorf("failed to determine go.mod requirement for %q: %w", orchestrionPkgPath, err)
-	}
-
-	rawTag, _ := version.TagInfo()
-	if rVersion == rawTag || rVersion == version.Tag() || (rVersion == "" && path == orchestrionSrcDir) {
-		// This is the correct version already, so we can proceed without further ado.
-		return nil
-	}
-
-	return IncorrectVersionError{RequiredVersion: rVersion}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+/* Current working directory */
+
+// This is the correct version already, so we can proceed without further ado.
 
 // goModVersion returns the version and path of the "github.com/DataDog/orchestrion" module that is
 // required in the specified directory's "go.mod" file. If dir is blank, the process' current
 // working directory is used. The version may be blank if a replace directive is in effect; in which
 // case the path value may indicate the location of the source code that is being used instead.
 func goModVersion(ctx context.Context, dir string) (moduleVersion string, moduleDir string, err error) {
-	gomod, err := goenv.GOMOD(dir)
-	if err != nil {
-		return "", "", err
-	}
-
-	log := zerolog.Ctx(ctx)
-	cfg := &packages.Config{
-		Dir:  filepath.Dir(gomod),
-		Mode: packages.NeedModule,
-		Logf: func(format string, args ...any) { log.Trace().Str("operation", "packages.Load").Msgf(format, args...) },
-	}
-
-	pkgs, err := packages.Load(cfg, orchestrionPkgPath)
-	if err != nil {
-		return "", "", err
-	}
-
-	pkg := pkgs[0]
-	if len(pkg.Errors) > 0 {
-		errs := make([]error, len(pkg.Errors))
-		for i, e := range pkg.Errors {
-			errs[i] = errors.New(e.Error())
-		}
-		return "", "", errors.Join(errs...)
-	}
-
-	// Shouldn't happen but does when the current working directory is not
-	// part of a go module's source tree.
-	// See: https://github.com/golang/go/issues/65816
-	if pkg.Module == nil {
-		return "", "", fmt.Errorf("no module information found for package %q", pkg.PkgPath)
-	}
-
-	if pkg.Module.Replace != nil {
-		// If there's a replace directive, that's what we need to be honoring instead.
-		return pkg.Module.Replace.Version, pkg.Module.Replace.Dir, nil
-	}
-
-	return pkg.Module.Version, pkg.Module.Dir, nil
+	_ = "STUB: not implemented"
+	return "", "", nil
 }
+
+// Shouldn't happen but does when the current working directory is not
+// part of a go module's source tree.
+// See: https://github.com/golang/go/issues/65816
+
+// If there's a replace directive, that's what we need to be honoring instead.
 
 func init() {
 	_, thisFile, _, _ := runtime.Caller(0)

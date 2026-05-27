@@ -6,8 +6,6 @@
 package lineinfo
 
 import (
-	"go/ast"
-
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 )
@@ -23,28 +21,14 @@ func AnnotateMovedNodes(
 	// A function that creates a new *decorator.FileRestorer for the given filename
 	newRestorer func(string) *decorator.FileRestorer,
 ) error {
-	canonicalizer := canonicalizationVisitor{}
-	// Pre-process the AST to make it closer to the canonical go format, which will allow us to have
-	// more accurate "after-printing" line information.
-	dst.Walk(&canonicalizer, file)
-	if len(canonicalizer.stack) != 0 {
-		panic("noempty stack after canonicalizater visit is complete")
-	}
-
-	// Restore to an *ast.File so we can obtain the new line information data.
-	res := newRestorer(decorator.Filenames[file])
-	astFile, err := res.RestoreFile(file)
-	if err != nil {
-		return err
-	}
-
-	// Visit the AST to add `//line` directives where the updated line information no longer matches
-	// the original source file's.
-	annotator := annotationVisitor{dec: decorator, res: res}
-	ast.Walk(&annotator, astFile)
-	if len(annotator.stack) != 0 {
-		panic("noempty stack after annotation visit is complete")
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Pre-process the AST to make it closer to the canonical go format, which will allow us to have
+// more accurate "after-printing" line information.
+
+// Restore to an *ast.File so we can obtain the new line information data.
+
+// Visit the AST to add `//line` directives where the updated line information no longer matches
+// the original source file's.

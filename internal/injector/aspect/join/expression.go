@@ -14,7 +14,6 @@ import (
 	"github.com/DataDog/orchestrion/internal/injector/aspect/context"
 	"github.com/DataDog/orchestrion/internal/injector/aspect/may"
 	"github.com/DataDog/orchestrion/internal/yaml"
-	"github.com/dave/dst"
 	"github.com/goccy/go-yaml/ast"
 )
 
@@ -24,49 +23,30 @@ type functionCall struct {
 }
 
 func FunctionCall(importPath string, name string) *functionCall {
-	return &functionCall{ImportPath: importPath, Name: name}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (i *functionCall) ImpliesImported() []string {
-	return []string{i.ImportPath}
-}
+func (i *functionCall) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
 
 func (i *functionCall) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	return ctx.PackageImports(i.ImportPath)
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (i *functionCall) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	return ctx.FileContains(i.Name)
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (i *functionCall) Matches(ctx context.AspectContext) bool {
-	call, ok := ctx.Node().(*dst.CallExpr)
-	if !ok {
-		return false
-	}
-
-	switch fun := call.Fun.(type) {
-	case *dst.Ident:
-		return fun.Path == i.ImportPath && fun.Name == i.Name
-	case *dst.SelectorExpr:
-		if fun.Sel.Name != i.Name {
-			return false
-		}
-		ident, ok := fun.X.(*dst.Ident)
-		if !ok {
-			return false
-		}
-
-		// TODO: Must actually look at whether ident.Name is the import of the relevant package path.
-		return ident.Path == i.ImportPath
-	default:
-		return false
-	}
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (i *functionCall) Hash(h *fingerprint.Hasher) error {
-	return h.Named("function-call", fingerprint.String(i.ImportPath), fingerprint.String(i.Name))
-}
+// TODO: Must actually look at whether ident.Name is the import of the relevant package path.
+
+func (i *functionCall) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 // See: https://regex101.com/r/fjLo1l/1
 var funcNamePattern = regexp.MustCompile(`\A(?:(.+)\.)?([\p{L}_][\p{L}_\p{Nd}]*)\z`)

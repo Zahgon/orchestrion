@@ -18,29 +18,23 @@ type not struct {
 	JoinPoint Point
 }
 
-func Not(jp Point) not {
-	return not{jp}
-}
+func Not(jp Point) not { _ = "STUB: not implemented"; return *new(not) }
 
-func (not) ImpliesImported() []string {
-	return nil
-}
+func (not) ImpliesImported() []string { _ = "STUB: not implemented"; return nil }
 
 func (n not) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	return n.JoinPoint.PackageMayMatch(ctx).Not()
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (n not) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	return n.JoinPoint.FileMayMatch(ctx).Not()
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
-func (n not) Matches(ctx context.AspectContext) bool {
-	return !n.JoinPoint.Matches(ctx)
-}
+func (n not) Matches(ctx context.AspectContext) bool { _ = "STUB: not implemented"; return false }
 
-func (n not) Hash(h *fingerprint.Hasher) error {
-	return h.Named("not", n.JoinPoint)
-}
+func (n not) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	unmarshalers["not"] = func(ctx gocontext.Context, node ast.Node) (Point, error) {

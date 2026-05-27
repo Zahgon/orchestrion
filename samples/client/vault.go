@@ -5,29 +5,6 @@
 
 package main
 
-import (
-	"net/http"
+func vaultClient() { _ = "STUB: not implemented"; return }
 
-	"github.com/hashicorp/vault/api"
-)
-
-func vaultClient() {
-	c, err := api.NewClient(&api.Config{
-		Address: "http://vault.mydomain.com:8200",
-	})
-	if err != nil {
-		panic(err)
-	}
-	c.Logical().Read("secret/key")
-}
-
-func vaultProvidedClient() {
-	c, err := api.NewClient(&api.Config{
-		HttpClient: &http.Client{},
-		Address:    "http://vault.mydomain.com:8200",
-	})
-	if err != nil {
-		panic(err)
-	}
-	c.Logical().Read("secret/key")
-}
+func vaultProvidedClient() { _ = "STUB: not implemented"; return }

@@ -5,21 +5,4 @@
 
 package main
 
-import (
-	"log"
-	"net"
-
-	"google.golang.org/grpc"
-)
-
-func grpcServer() {
-	ln, err := net.Listen("tcp", ":50051")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	s := grpc.NewServer(grpc.EmptyServerOption{})
-	if err := s.Serve(ln); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-}
+func grpcServer() { _ = "STUB: not implemented"; return }

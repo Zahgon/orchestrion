@@ -17,52 +17,25 @@ import (
 
 type allOf []Point
 
-func AllOf(requirements ...Point) allOf {
-	return requirements
-}
+func AllOf(requirements ...Point) allOf { _ = "STUB: not implemented"; return *new(allOf) }
 
-func (o allOf) ImpliesImported() (list []string) {
-	for _, jp := range o {
-		list = append(list, jp.ImpliesImported()...)
-	}
-	return
-}
+func (o allOf) ImpliesImported() (list []string) { _ = "STUB: not implemented"; return nil }
 
 func (o allOf) PackageMayMatch(ctx *may.PackageContext) may.MatchType {
-	sum := may.Match
-	for _, candidate := range o {
-		sum = sum.And(candidate.PackageMayMatch(ctx))
-		if sum == may.NeverMatch {
-			return may.NeverMatch
-		}
-	}
-	return sum
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
 func (o allOf) FileMayMatch(ctx *may.FileContext) may.MatchType {
-	sum := may.Match
-	for _, candidate := range o {
-		sum = sum.And(candidate.FileMayMatch(ctx))
-		if sum == may.NeverMatch {
-			return may.NeverMatch
-		}
-	}
-	return sum
+	_ = "STUB: not implemented"
+	return *new(may.MatchType)
 }
 
-func (o allOf) Matches(ctx context.AspectContext) bool {
-	for _, candidate := range o {
-		if !candidate.Matches(ctx) {
-			return false
-		}
-	}
-	// Never matches if there is no requirement
-	return len(o) > 0
-}
+func (o allOf) Matches(ctx context.AspectContext) bool { _ = "STUB: not implemented"; return false }
 
-func (o allOf) Hash(h *fingerprint.Hasher) error {
-	return h.Named("all-of", fingerprint.List[Point](o))
-}
+// Never matches if there is no requirement
+
+func (o allOf) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	unmarshalers["all-of"] = func(ctx gocontext.Context, node ast.Node) (Point, error) {

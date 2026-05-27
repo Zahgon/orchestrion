@@ -7,8 +7,6 @@ package proxy
 
 import (
 	"context"
-	"errors"
-	"path/filepath"
 )
 
 //go:generate go run github.com/DataDog/orchestrion/internal/toolexec/proxy/generator -command=link
@@ -28,29 +26,15 @@ type LinkCommand struct {
 	WorkDir string
 }
 
-func (*LinkCommand) Type() CommandType {
-	return CommandTypeLink
-}
+func (*LinkCommand) Type() CommandType { _ = "STUB: not implemented"; return *new(CommandType) }
 
-func (cmd *LinkCommand) ShowVersion() bool {
-	return cmd.Flags.ShowVersion
-}
+func (cmd *LinkCommand) ShowVersion() bool { _ = "STUB: not implemented"; return false }
 
-func (cmd *LinkCommand) Stage() string {
-	return filepath.Base(filepath.Dir(filepath.Dir(cmd.Flags.Output)))
-}
+func (cmd *LinkCommand) Stage() string { _ = "STUB: not implemented"; return "" }
 
 func parseLinkCommand(_ context.Context, args []string) (Command, error) {
-	if len(args) == 0 {
-		return nil, errors.New("unexpected number of command arguments")
-	}
-	flags := &linkFlagSet{}
-	if _, err := flags.parse(args[1:]); err != nil {
-		return nil, err
-	}
-
-	// The WorkDir is the parent of the stage dir, and the ImportCfg file is directly in the stage dir.
-	workDir := filepath.Dir(filepath.Dir(flags.ImportCfg))
-
-	return &LinkCommand{command: NewCommand(args), Flags: *flags, WorkDir: workDir}, nil
+	_ = "STUB: not implemented"
+	return *new(Command), nil
 }
+
+// The WorkDir is the parent of the stage dir, and the ImportCfg file is directly in the stage dir.

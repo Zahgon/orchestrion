@@ -14,1261 +14,666 @@ type proxyArrayType struct {
 	placeholders *placeholders
 }
 
-func (p *proxyArrayType) Copy() string {
-	return p.placeholders.forNode(p.ArrayType, false)
-}
+func (p *proxyArrayType) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyArrayType) String() string {
-	return p.placeholders.forNode(p.ArrayType, true)
-}
+func (p *proxyArrayType) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyArrayType) Len() dst.Expr {
-	return newProxy[dst.Expr](p.ArrayType.Len, p.placeholders)
-}
+func (p *proxyArrayType) Len() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyArrayType) Elt() dst.Expr {
-	return newProxy[dst.Expr](p.ArrayType.Elt, p.placeholders)
-}
+func (p *proxyArrayType) Elt() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyAssignStmt struct {
 	*dst.AssignStmt
 	placeholders *placeholders
 }
 
-func (p *proxyAssignStmt) Copy() string {
-	return p.placeholders.forNode(p.AssignStmt, false)
-}
+func (p *proxyAssignStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyAssignStmt) String() string {
-	return p.placeholders.forNode(p.AssignStmt, true)
-}
+func (p *proxyAssignStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyAssignStmt) Lhs() []dst.Expr {
-	if p.AssignStmt.Lhs == nil {
-		return nil
-	}
-	res := make([]dst.Expr, len(p.AssignStmt.Lhs))
-	for i, node := range p.AssignStmt.Lhs {
-		res[i] = newProxy[dst.Expr](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyAssignStmt) Lhs() []dst.Expr { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyAssignStmt) Rhs() []dst.Expr {
-	if p.AssignStmt.Rhs == nil {
-		return nil
-	}
-	res := make([]dst.Expr, len(p.AssignStmt.Rhs))
-	for i, node := range p.AssignStmt.Rhs {
-		res[i] = newProxy[dst.Expr](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyAssignStmt) Rhs() []dst.Expr { _ = "STUB: not implemented"; return nil }
 
 type proxyBadDecl struct {
 	*dst.BadDecl
 	placeholders *placeholders
 }
 
-func (p *proxyBadDecl) Copy() string {
-	return p.placeholders.forNode(p.BadDecl, false)
-}
+func (p *proxyBadDecl) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBadDecl) String() string {
-	return p.placeholders.forNode(p.BadDecl, true)
-}
+func (p *proxyBadDecl) String() string { _ = "STUB: not implemented"; return "" }
 
 type proxyBadExpr struct {
 	*dst.BadExpr
 	placeholders *placeholders
 }
 
-func (p *proxyBadExpr) Copy() string {
-	return p.placeholders.forNode(p.BadExpr, false)
-}
+func (p *proxyBadExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBadExpr) String() string {
-	return p.placeholders.forNode(p.BadExpr, true)
-}
+func (p *proxyBadExpr) String() string { _ = "STUB: not implemented"; return "" }
 
 type proxyBadStmt struct {
 	*dst.BadStmt
 	placeholders *placeholders
 }
 
-func (p *proxyBadStmt) Copy() string {
-	return p.placeholders.forNode(p.BadStmt, false)
-}
+func (p *proxyBadStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBadStmt) String() string {
-	return p.placeholders.forNode(p.BadStmt, true)
-}
+func (p *proxyBadStmt) String() string { _ = "STUB: not implemented"; return "" }
 
 type proxyBasicLit struct {
 	*dst.BasicLit
 	placeholders *placeholders
 }
 
-func (p *proxyBasicLit) Copy() string {
-	return p.placeholders.forNode(p.BasicLit, false)
-}
+func (p *proxyBasicLit) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBasicLit) String() string {
-	return p.placeholders.forNode(p.BasicLit, true)
-}
+func (p *proxyBasicLit) String() string { _ = "STUB: not implemented"; return "" }
 
 type proxyBinaryExpr struct {
 	*dst.BinaryExpr
 	placeholders *placeholders
 }
 
-func (p *proxyBinaryExpr) Copy() string {
-	return p.placeholders.forNode(p.BinaryExpr, false)
-}
+func (p *proxyBinaryExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBinaryExpr) String() string {
-	return p.placeholders.forNode(p.BinaryExpr, true)
-}
+func (p *proxyBinaryExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBinaryExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.BinaryExpr.X, p.placeholders)
-}
+func (p *proxyBinaryExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyBinaryExpr) Y() dst.Expr {
-	return newProxy[dst.Expr](p.BinaryExpr.Y, p.placeholders)
-}
+func (p *proxyBinaryExpr) Y() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyBlockStmt struct {
 	*dst.BlockStmt
 	placeholders *placeholders
 }
 
-func (p *proxyBlockStmt) Copy() string {
-	return p.placeholders.forNode(p.BlockStmt, false)
-}
+func (p *proxyBlockStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBlockStmt) String() string {
-	return p.placeholders.forNode(p.BlockStmt, true)
-}
+func (p *proxyBlockStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBlockStmt) List() []dst.Stmt {
-	if p.BlockStmt.List == nil {
-		return nil
-	}
-	res := make([]dst.Stmt, len(p.BlockStmt.List))
-	for i, node := range p.BlockStmt.List {
-		res[i] = newProxy[dst.Stmt](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyBlockStmt) List() []dst.Stmt { _ = "STUB: not implemented"; return nil }
 
 type proxyBranchStmt struct {
 	*dst.BranchStmt
 	placeholders *placeholders
 }
 
-func (p *proxyBranchStmt) Copy() string {
-	return p.placeholders.forNode(p.BranchStmt, false)
-}
+func (p *proxyBranchStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBranchStmt) String() string {
-	return p.placeholders.forNode(p.BranchStmt, true)
-}
+func (p *proxyBranchStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyBranchStmt) Label() *proxyIdent {
-	return newProxy[*proxyIdent](p.BranchStmt.Label, p.placeholders)
-}
+func (p *proxyBranchStmt) Label() *proxyIdent { _ = "STUB: not implemented"; return nil }
 
 type proxyCallExpr struct {
 	*dst.CallExpr
 	placeholders *placeholders
 }
 
-func (p *proxyCallExpr) Copy() string {
-	return p.placeholders.forNode(p.CallExpr, false)
-}
+func (p *proxyCallExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyCallExpr) String() string {
-	return p.placeholders.forNode(p.CallExpr, true)
-}
+func (p *proxyCallExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyCallExpr) Fun() dst.Expr {
-	return newProxy[dst.Expr](p.CallExpr.Fun, p.placeholders)
-}
+func (p *proxyCallExpr) Fun() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyCallExpr) Args() []dst.Expr {
-	if p.CallExpr.Args == nil {
-		return nil
-	}
-	res := make([]dst.Expr, len(p.CallExpr.Args))
-	for i, node := range p.CallExpr.Args {
-		res[i] = newProxy[dst.Expr](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyCallExpr) Args() []dst.Expr { _ = "STUB: not implemented"; return nil }
 
 type proxyCaseClause struct {
 	*dst.CaseClause
 	placeholders *placeholders
 }
 
-func (p *proxyCaseClause) Copy() string {
-	return p.placeholders.forNode(p.CaseClause, false)
-}
+func (p *proxyCaseClause) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyCaseClause) String() string {
-	return p.placeholders.forNode(p.CaseClause, true)
-}
+func (p *proxyCaseClause) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyCaseClause) List() []dst.Expr {
-	if p.CaseClause.List == nil {
-		return nil
-	}
-	res := make([]dst.Expr, len(p.CaseClause.List))
-	for i, node := range p.CaseClause.List {
-		res[i] = newProxy[dst.Expr](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyCaseClause) List() []dst.Expr { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyCaseClause) Body() []dst.Stmt {
-	if p.CaseClause.Body == nil {
-		return nil
-	}
-	res := make([]dst.Stmt, len(p.CaseClause.Body))
-	for i, node := range p.CaseClause.Body {
-		res[i] = newProxy[dst.Stmt](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyCaseClause) Body() []dst.Stmt { _ = "STUB: not implemented"; return nil }
 
 type proxyChanType struct {
 	*dst.ChanType
 	placeholders *placeholders
 }
 
-func (p *proxyChanType) Copy() string {
-	return p.placeholders.forNode(p.ChanType, false)
-}
+func (p *proxyChanType) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyChanType) String() string {
-	return p.placeholders.forNode(p.ChanType, true)
-}
+func (p *proxyChanType) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyChanType) Value() dst.Expr {
-	return newProxy[dst.Expr](p.ChanType.Value, p.placeholders)
-}
+func (p *proxyChanType) Value() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyCommClause struct {
 	*dst.CommClause
 	placeholders *placeholders
 }
 
-func (p *proxyCommClause) Copy() string {
-	return p.placeholders.forNode(p.CommClause, false)
-}
+func (p *proxyCommClause) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyCommClause) String() string {
-	return p.placeholders.forNode(p.CommClause, true)
-}
+func (p *proxyCommClause) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyCommClause) Comm() dst.Stmt {
-	return newProxy[dst.Stmt](p.CommClause.Comm, p.placeholders)
-}
+func (p *proxyCommClause) Comm() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
-func (p *proxyCommClause) Body() []dst.Stmt {
-	if p.CommClause.Body == nil {
-		return nil
-	}
-	res := make([]dst.Stmt, len(p.CommClause.Body))
-	for i, node := range p.CommClause.Body {
-		res[i] = newProxy[dst.Stmt](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyCommClause) Body() []dst.Stmt { _ = "STUB: not implemented"; return nil }
 
 type proxyCompositeLit struct {
 	*dst.CompositeLit
 	placeholders *placeholders
 }
 
-func (p *proxyCompositeLit) Copy() string {
-	return p.placeholders.forNode(p.CompositeLit, false)
-}
+func (p *proxyCompositeLit) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyCompositeLit) String() string {
-	return p.placeholders.forNode(p.CompositeLit, true)
-}
+func (p *proxyCompositeLit) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyCompositeLit) Type() dst.Expr {
-	return newProxy[dst.Expr](p.CompositeLit.Type, p.placeholders)
-}
+func (p *proxyCompositeLit) Type() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyCompositeLit) Elts() []dst.Expr {
-	if p.CompositeLit.Elts == nil {
-		return nil
-	}
-	res := make([]dst.Expr, len(p.CompositeLit.Elts))
-	for i, node := range p.CompositeLit.Elts {
-		res[i] = newProxy[dst.Expr](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyCompositeLit) Elts() []dst.Expr { _ = "STUB: not implemented"; return nil }
 
 type proxyDeclStmt struct {
 	*dst.DeclStmt
 	placeholders *placeholders
 }
 
-func (p *proxyDeclStmt) Copy() string {
-	return p.placeholders.forNode(p.DeclStmt, false)
-}
+func (p *proxyDeclStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyDeclStmt) String() string {
-	return p.placeholders.forNode(p.DeclStmt, true)
-}
+func (p *proxyDeclStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyDeclStmt) Decl() dst.Decl {
-	return newProxy[dst.Decl](p.DeclStmt.Decl, p.placeholders)
-}
+func (p *proxyDeclStmt) Decl() dst.Decl { _ = "STUB: not implemented"; return *new(dst.Decl) }
 
 type proxyDeferStmt struct {
 	*dst.DeferStmt
 	placeholders *placeholders
 }
 
-func (p *proxyDeferStmt) Copy() string {
-	return p.placeholders.forNode(p.DeferStmt, false)
-}
+func (p *proxyDeferStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyDeferStmt) String() string {
-	return p.placeholders.forNode(p.DeferStmt, true)
-}
+func (p *proxyDeferStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyDeferStmt) Call() *proxyCallExpr {
-	return newProxy[*proxyCallExpr](p.DeferStmt.Call, p.placeholders)
-}
+func (p *proxyDeferStmt) Call() *proxyCallExpr { _ = "STUB: not implemented"; return nil }
 
 type proxyEllipsis struct {
 	*dst.Ellipsis
 	placeholders *placeholders
 }
 
-func (p *proxyEllipsis) Copy() string {
-	return p.placeholders.forNode(p.Ellipsis, false)
-}
+func (p *proxyEllipsis) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyEllipsis) String() string {
-	return p.placeholders.forNode(p.Ellipsis, true)
-}
+func (p *proxyEllipsis) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyEllipsis) Elt() dst.Expr {
-	return newProxy[dst.Expr](p.Ellipsis.Elt, p.placeholders)
-}
+func (p *proxyEllipsis) Elt() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyEmptyStmt struct {
 	*dst.EmptyStmt
 	placeholders *placeholders
 }
 
-func (p *proxyEmptyStmt) Copy() string {
-	return p.placeholders.forNode(p.EmptyStmt, false)
-}
+func (p *proxyEmptyStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyEmptyStmt) String() string {
-	return p.placeholders.forNode(p.EmptyStmt, true)
-}
+func (p *proxyEmptyStmt) String() string { _ = "STUB: not implemented"; return "" }
 
 type proxyExprStmt struct {
 	*dst.ExprStmt
 	placeholders *placeholders
 }
 
-func (p *proxyExprStmt) Copy() string {
-	return p.placeholders.forNode(p.ExprStmt, false)
-}
+func (p *proxyExprStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyExprStmt) String() string {
-	return p.placeholders.forNode(p.ExprStmt, true)
-}
+func (p *proxyExprStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyExprStmt) X() dst.Expr {
-	return newProxy[dst.Expr](p.ExprStmt.X, p.placeholders)
-}
+func (p *proxyExprStmt) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyField struct {
 	*dst.Field
 	placeholders *placeholders
 }
 
-func (p *proxyField) Copy() string {
-	return p.placeholders.forNode(p.Field, false)
-}
+func (p *proxyField) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyField) String() string {
-	return p.placeholders.forNode(p.Field, true)
-}
+func (p *proxyField) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyField) Type() dst.Expr {
-	return newProxy[dst.Expr](p.Field.Type, p.placeholders)
-}
+func (p *proxyField) Type() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyField) Tag() *proxyBasicLit {
-	return newProxy[*proxyBasicLit](p.Field.Tag, p.placeholders)
-}
+func (p *proxyField) Tag() *proxyBasicLit { _ = "STUB: not implemented"; return nil }
 
 type proxyFieldList struct {
 	*dst.FieldList
 	placeholders *placeholders
 }
 
-func (p *proxyFieldList) Copy() string {
-	return p.placeholders.forNode(p.FieldList, false)
-}
+func (p *proxyFieldList) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFieldList) String() string {
-	return p.placeholders.forNode(p.FieldList, true)
-}
+func (p *proxyFieldList) String() string { _ = "STUB: not implemented"; return "" }
 
 type proxyFile struct {
 	*dst.File
 	placeholders *placeholders
 }
 
-func (p *proxyFile) Copy() string {
-	return p.placeholders.forNode(p.File, false)
-}
+func (p *proxyFile) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFile) String() string {
-	return p.placeholders.forNode(p.File, true)
-}
+func (p *proxyFile) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFile) Name() *proxyIdent {
-	return newProxy[*proxyIdent](p.File.Name, p.placeholders)
-}
+func (p *proxyFile) Name() *proxyIdent { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyFile) Decls() []dst.Decl {
-	if p.File.Decls == nil {
-		return nil
-	}
-	res := make([]dst.Decl, len(p.File.Decls))
-	for i, node := range p.File.Decls {
-		res[i] = newProxy[dst.Decl](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyFile) Decls() []dst.Decl { _ = "STUB: not implemented"; return nil }
 
 type proxyForStmt struct {
 	*dst.ForStmt
 	placeholders *placeholders
 }
 
-func (p *proxyForStmt) Copy() string {
-	return p.placeholders.forNode(p.ForStmt, false)
-}
+func (p *proxyForStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyForStmt) String() string {
-	return p.placeholders.forNode(p.ForStmt, true)
-}
+func (p *proxyForStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyForStmt) Init() dst.Stmt {
-	return newProxy[dst.Stmt](p.ForStmt.Init, p.placeholders)
-}
+func (p *proxyForStmt) Init() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
-func (p *proxyForStmt) Cond() dst.Expr {
-	return newProxy[dst.Expr](p.ForStmt.Cond, p.placeholders)
-}
+func (p *proxyForStmt) Cond() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyForStmt) Post() dst.Stmt {
-	return newProxy[dst.Stmt](p.ForStmt.Post, p.placeholders)
-}
+func (p *proxyForStmt) Post() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
-func (p *proxyForStmt) Body() *proxyBlockStmt {
-	return newProxy[*proxyBlockStmt](p.ForStmt.Body, p.placeholders)
-}
+func (p *proxyForStmt) Body() *proxyBlockStmt { _ = "STUB: not implemented"; return nil }
 
 type proxyFuncDecl struct {
 	*dst.FuncDecl
 	placeholders *placeholders
 }
 
-func (p *proxyFuncDecl) Copy() string {
-	return p.placeholders.forNode(p.FuncDecl, false)
-}
+func (p *proxyFuncDecl) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFuncDecl) String() string {
-	return p.placeholders.forNode(p.FuncDecl, true)
-}
+func (p *proxyFuncDecl) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFuncDecl) Recv() *proxyFieldList {
-	return newProxy[*proxyFieldList](p.FuncDecl.Recv, p.placeholders)
-}
+func (p *proxyFuncDecl) Recv() *proxyFieldList { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyFuncDecl) Name() *proxyIdent {
-	return newProxy[*proxyIdent](p.FuncDecl.Name, p.placeholders)
-}
+func (p *proxyFuncDecl) Name() *proxyIdent { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyFuncDecl) Type() *proxyFuncType {
-	return newProxy[*proxyFuncType](p.FuncDecl.Type, p.placeholders)
-}
+func (p *proxyFuncDecl) Type() *proxyFuncType { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyFuncDecl) Body() *proxyBlockStmt {
-	return newProxy[*proxyBlockStmt](p.FuncDecl.Body, p.placeholders)
-}
+func (p *proxyFuncDecl) Body() *proxyBlockStmt { _ = "STUB: not implemented"; return nil }
 
 type proxyFuncLit struct {
 	*dst.FuncLit
 	placeholders *placeholders
 }
 
-func (p *proxyFuncLit) Copy() string {
-	return p.placeholders.forNode(p.FuncLit, false)
-}
+func (p *proxyFuncLit) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFuncLit) String() string {
-	return p.placeholders.forNode(p.FuncLit, true)
-}
+func (p *proxyFuncLit) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFuncLit) Type() *proxyFuncType {
-	return newProxy[*proxyFuncType](p.FuncLit.Type, p.placeholders)
-}
+func (p *proxyFuncLit) Type() *proxyFuncType { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyFuncLit) Body() *proxyBlockStmt {
-	return newProxy[*proxyBlockStmt](p.FuncLit.Body, p.placeholders)
-}
+func (p *proxyFuncLit) Body() *proxyBlockStmt { _ = "STUB: not implemented"; return nil }
 
 type proxyFuncType struct {
 	*dst.FuncType
 	placeholders *placeholders
 }
 
-func (p *proxyFuncType) Copy() string {
-	return p.placeholders.forNode(p.FuncType, false)
-}
+func (p *proxyFuncType) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFuncType) String() string {
-	return p.placeholders.forNode(p.FuncType, true)
-}
+func (p *proxyFuncType) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyFuncType) TypeParams() *proxyFieldList {
-	return newProxy[*proxyFieldList](p.FuncType.TypeParams, p.placeholders)
-}
+func (p *proxyFuncType) TypeParams() *proxyFieldList { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyFuncType) Params() *proxyFieldList {
-	return newProxy[*proxyFieldList](p.FuncType.Params, p.placeholders)
-}
+func (p *proxyFuncType) Params() *proxyFieldList { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyFuncType) Results() *proxyFieldList {
-	return newProxy[*proxyFieldList](p.FuncType.Results, p.placeholders)
-}
+func (p *proxyFuncType) Results() *proxyFieldList { _ = "STUB: not implemented"; return nil }
 
 type proxyGenDecl struct {
 	*dst.GenDecl
 	placeholders *placeholders
 }
 
-func (p *proxyGenDecl) Copy() string {
-	return p.placeholders.forNode(p.GenDecl, false)
-}
+func (p *proxyGenDecl) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyGenDecl) String() string {
-	return p.placeholders.forNode(p.GenDecl, true)
-}
+func (p *proxyGenDecl) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyGenDecl) Specs() []dst.Spec {
-	if p.GenDecl.Specs == nil {
-		return nil
-	}
-	res := make([]dst.Spec, len(p.GenDecl.Specs))
-	for i, node := range p.GenDecl.Specs {
-		res[i] = newProxy[dst.Spec](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyGenDecl) Specs() []dst.Spec { _ = "STUB: not implemented"; return nil }
 
 type proxyGoStmt struct {
 	*dst.GoStmt
 	placeholders *placeholders
 }
 
-func (p *proxyGoStmt) Copy() string {
-	return p.placeholders.forNode(p.GoStmt, false)
-}
+func (p *proxyGoStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyGoStmt) String() string {
-	return p.placeholders.forNode(p.GoStmt, true)
-}
+func (p *proxyGoStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyGoStmt) Call() *proxyCallExpr {
-	return newProxy[*proxyCallExpr](p.GoStmt.Call, p.placeholders)
-}
+func (p *proxyGoStmt) Call() *proxyCallExpr { _ = "STUB: not implemented"; return nil }
 
 type proxyIdent struct {
 	*dst.Ident
 	placeholders *placeholders
 }
 
-func (p *proxyIdent) Copy() string {
-	return p.placeholders.forNode(p.Ident, false)
-}
+func (p *proxyIdent) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIdent) String() string {
-	return p.placeholders.forNode(p.Ident, true)
-}
+func (p *proxyIdent) String() string { _ = "STUB: not implemented"; return "" }
 
 type proxyIfStmt struct {
 	*dst.IfStmt
 	placeholders *placeholders
 }
 
-func (p *proxyIfStmt) Copy() string {
-	return p.placeholders.forNode(p.IfStmt, false)
-}
+func (p *proxyIfStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIfStmt) String() string {
-	return p.placeholders.forNode(p.IfStmt, true)
-}
+func (p *proxyIfStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIfStmt) Init() dst.Stmt {
-	return newProxy[dst.Stmt](p.IfStmt.Init, p.placeholders)
-}
+func (p *proxyIfStmt) Init() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
-func (p *proxyIfStmt) Cond() dst.Expr {
-	return newProxy[dst.Expr](p.IfStmt.Cond, p.placeholders)
-}
+func (p *proxyIfStmt) Cond() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyIfStmt) Body() *proxyBlockStmt {
-	return newProxy[*proxyBlockStmt](p.IfStmt.Body, p.placeholders)
-}
+func (p *proxyIfStmt) Body() *proxyBlockStmt { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyIfStmt) Else() dst.Stmt {
-	return newProxy[dst.Stmt](p.IfStmt.Else, p.placeholders)
-}
+func (p *proxyIfStmt) Else() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
 type proxyImportSpec struct {
 	*dst.ImportSpec
 	placeholders *placeholders
 }
 
-func (p *proxyImportSpec) Copy() string {
-	return p.placeholders.forNode(p.ImportSpec, false)
-}
+func (p *proxyImportSpec) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyImportSpec) String() string {
-	return p.placeholders.forNode(p.ImportSpec, true)
-}
+func (p *proxyImportSpec) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyImportSpec) Name() *proxyIdent {
-	return newProxy[*proxyIdent](p.ImportSpec.Name, p.placeholders)
-}
+func (p *proxyImportSpec) Name() *proxyIdent { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyImportSpec) Path() *proxyBasicLit {
-	return newProxy[*proxyBasicLit](p.ImportSpec.Path, p.placeholders)
-}
+func (p *proxyImportSpec) Path() *proxyBasicLit { _ = "STUB: not implemented"; return nil }
 
 type proxyIncDecStmt struct {
 	*dst.IncDecStmt
 	placeholders *placeholders
 }
 
-func (p *proxyIncDecStmt) Copy() string {
-	return p.placeholders.forNode(p.IncDecStmt, false)
-}
+func (p *proxyIncDecStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIncDecStmt) String() string {
-	return p.placeholders.forNode(p.IncDecStmt, true)
-}
+func (p *proxyIncDecStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIncDecStmt) X() dst.Expr {
-	return newProxy[dst.Expr](p.IncDecStmt.X, p.placeholders)
-}
+func (p *proxyIncDecStmt) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyIndexExpr struct {
 	*dst.IndexExpr
 	placeholders *placeholders
 }
 
-func (p *proxyIndexExpr) Copy() string {
-	return p.placeholders.forNode(p.IndexExpr, false)
-}
+func (p *proxyIndexExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIndexExpr) String() string {
-	return p.placeholders.forNode(p.IndexExpr, true)
-}
+func (p *proxyIndexExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIndexExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.IndexExpr.X, p.placeholders)
-}
+func (p *proxyIndexExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyIndexExpr) Index() dst.Expr {
-	return newProxy[dst.Expr](p.IndexExpr.Index, p.placeholders)
-}
+func (p *proxyIndexExpr) Index() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyIndexListExpr struct {
 	*dst.IndexListExpr
 	placeholders *placeholders
 }
 
-func (p *proxyIndexListExpr) Copy() string {
-	return p.placeholders.forNode(p.IndexListExpr, false)
-}
+func (p *proxyIndexListExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIndexListExpr) String() string {
-	return p.placeholders.forNode(p.IndexListExpr, true)
-}
+func (p *proxyIndexListExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyIndexListExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.IndexListExpr.X, p.placeholders)
-}
+func (p *proxyIndexListExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyIndexListExpr) Indices() []dst.Expr {
-	if p.IndexListExpr.Indices == nil {
-		return nil
-	}
-	res := make([]dst.Expr, len(p.IndexListExpr.Indices))
-	for i, node := range p.IndexListExpr.Indices {
-		res[i] = newProxy[dst.Expr](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyIndexListExpr) Indices() []dst.Expr { _ = "STUB: not implemented"; return nil }
 
 type proxyInterfaceType struct {
 	*dst.InterfaceType
 	placeholders *placeholders
 }
 
-func (p *proxyInterfaceType) Copy() string {
-	return p.placeholders.forNode(p.InterfaceType, false)
-}
+func (p *proxyInterfaceType) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyInterfaceType) String() string {
-	return p.placeholders.forNode(p.InterfaceType, true)
-}
+func (p *proxyInterfaceType) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyInterfaceType) Methods() *proxyFieldList {
-	return newProxy[*proxyFieldList](p.InterfaceType.Methods, p.placeholders)
-}
+func (p *proxyInterfaceType) Methods() *proxyFieldList { _ = "STUB: not implemented"; return nil }
 
 type proxyKeyValueExpr struct {
 	*dst.KeyValueExpr
 	placeholders *placeholders
 }
 
-func (p *proxyKeyValueExpr) Copy() string {
-	return p.placeholders.forNode(p.KeyValueExpr, false)
-}
+func (p *proxyKeyValueExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyKeyValueExpr) String() string {
-	return p.placeholders.forNode(p.KeyValueExpr, true)
-}
+func (p *proxyKeyValueExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyKeyValueExpr) Key() dst.Expr {
-	return newProxy[dst.Expr](p.KeyValueExpr.Key, p.placeholders)
-}
+func (p *proxyKeyValueExpr) Key() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyKeyValueExpr) Value() dst.Expr {
-	return newProxy[dst.Expr](p.KeyValueExpr.Value, p.placeholders)
-}
+func (p *proxyKeyValueExpr) Value() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyLabeledStmt struct {
 	*dst.LabeledStmt
 	placeholders *placeholders
 }
 
-func (p *proxyLabeledStmt) Copy() string {
-	return p.placeholders.forNode(p.LabeledStmt, false)
-}
+func (p *proxyLabeledStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyLabeledStmt) String() string {
-	return p.placeholders.forNode(p.LabeledStmt, true)
-}
+func (p *proxyLabeledStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyLabeledStmt) Label() *proxyIdent {
-	return newProxy[*proxyIdent](p.LabeledStmt.Label, p.placeholders)
-}
+func (p *proxyLabeledStmt) Label() *proxyIdent { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyLabeledStmt) Stmt() dst.Stmt {
-	return newProxy[dst.Stmt](p.LabeledStmt.Stmt, p.placeholders)
-}
+func (p *proxyLabeledStmt) Stmt() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
 type proxyMapType struct {
 	*dst.MapType
 	placeholders *placeholders
 }
 
-func (p *proxyMapType) Copy() string {
-	return p.placeholders.forNode(p.MapType, false)
-}
+func (p *proxyMapType) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyMapType) String() string {
-	return p.placeholders.forNode(p.MapType, true)
-}
+func (p *proxyMapType) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyMapType) Key() dst.Expr {
-	return newProxy[dst.Expr](p.MapType.Key, p.placeholders)
-}
+func (p *proxyMapType) Key() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyMapType) Value() dst.Expr {
-	return newProxy[dst.Expr](p.MapType.Value, p.placeholders)
-}
+func (p *proxyMapType) Value() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyPackage struct {
 	*dst.Package
 	placeholders *placeholders
 }
 
-func (p *proxyPackage) Copy() string {
-	return p.placeholders.forNode(p.Package, false)
-}
+func (p *proxyPackage) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyPackage) String() string {
-	return p.placeholders.forNode(p.Package, true)
-}
+func (p *proxyPackage) String() string { _ = "STUB: not implemented"; return "" }
 
 type proxyParenExpr struct {
 	*dst.ParenExpr
 	placeholders *placeholders
 }
 
-func (p *proxyParenExpr) Copy() string {
-	return p.placeholders.forNode(p.ParenExpr, false)
-}
+func (p *proxyParenExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyParenExpr) String() string {
-	return p.placeholders.forNode(p.ParenExpr, true)
-}
+func (p *proxyParenExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyParenExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.ParenExpr.X, p.placeholders)
-}
+func (p *proxyParenExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyRangeStmt struct {
 	*dst.RangeStmt
 	placeholders *placeholders
 }
 
-func (p *proxyRangeStmt) Copy() string {
-	return p.placeholders.forNode(p.RangeStmt, false)
-}
+func (p *proxyRangeStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyRangeStmt) String() string {
-	return p.placeholders.forNode(p.RangeStmt, true)
-}
+func (p *proxyRangeStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyRangeStmt) Key() dst.Expr {
-	return newProxy[dst.Expr](p.RangeStmt.Key, p.placeholders)
-}
+func (p *proxyRangeStmt) Key() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyRangeStmt) Value() dst.Expr {
-	return newProxy[dst.Expr](p.RangeStmt.Value, p.placeholders)
-}
+func (p *proxyRangeStmt) Value() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyRangeStmt) X() dst.Expr {
-	return newProxy[dst.Expr](p.RangeStmt.X, p.placeholders)
-}
+func (p *proxyRangeStmt) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyRangeStmt) Body() *proxyBlockStmt {
-	return newProxy[*proxyBlockStmt](p.RangeStmt.Body, p.placeholders)
-}
+func (p *proxyRangeStmt) Body() *proxyBlockStmt { _ = "STUB: not implemented"; return nil }
 
 type proxyReturnStmt struct {
 	*dst.ReturnStmt
 	placeholders *placeholders
 }
 
-func (p *proxyReturnStmt) Copy() string {
-	return p.placeholders.forNode(p.ReturnStmt, false)
-}
+func (p *proxyReturnStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyReturnStmt) String() string {
-	return p.placeholders.forNode(p.ReturnStmt, true)
-}
+func (p *proxyReturnStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyReturnStmt) Results() []dst.Expr {
-	if p.ReturnStmt.Results == nil {
-		return nil
-	}
-	res := make([]dst.Expr, len(p.ReturnStmt.Results))
-	for i, node := range p.ReturnStmt.Results {
-		res[i] = newProxy[dst.Expr](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyReturnStmt) Results() []dst.Expr { _ = "STUB: not implemented"; return nil }
 
 type proxySelectStmt struct {
 	*dst.SelectStmt
 	placeholders *placeholders
 }
 
-func (p *proxySelectStmt) Copy() string {
-	return p.placeholders.forNode(p.SelectStmt, false)
-}
+func (p *proxySelectStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySelectStmt) String() string {
-	return p.placeholders.forNode(p.SelectStmt, true)
-}
+func (p *proxySelectStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySelectStmt) Body() *proxyBlockStmt {
-	return newProxy[*proxyBlockStmt](p.SelectStmt.Body, p.placeholders)
-}
+func (p *proxySelectStmt) Body() *proxyBlockStmt { _ = "STUB: not implemented"; return nil }
 
 type proxySelectorExpr struct {
 	*dst.SelectorExpr
 	placeholders *placeholders
 }
 
-func (p *proxySelectorExpr) Copy() string {
-	return p.placeholders.forNode(p.SelectorExpr, false)
-}
+func (p *proxySelectorExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySelectorExpr) String() string {
-	return p.placeholders.forNode(p.SelectorExpr, true)
-}
+func (p *proxySelectorExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySelectorExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.SelectorExpr.X, p.placeholders)
-}
+func (p *proxySelectorExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxySelectorExpr) Sel() *proxyIdent {
-	return newProxy[*proxyIdent](p.SelectorExpr.Sel, p.placeholders)
-}
+func (p *proxySelectorExpr) Sel() *proxyIdent { _ = "STUB: not implemented"; return nil }
 
 type proxySendStmt struct {
 	*dst.SendStmt
 	placeholders *placeholders
 }
 
-func (p *proxySendStmt) Copy() string {
-	return p.placeholders.forNode(p.SendStmt, false)
-}
+func (p *proxySendStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySendStmt) String() string {
-	return p.placeholders.forNode(p.SendStmt, true)
-}
+func (p *proxySendStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySendStmt) Chan() dst.Expr {
-	return newProxy[dst.Expr](p.SendStmt.Chan, p.placeholders)
-}
+func (p *proxySendStmt) Chan() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxySendStmt) Value() dst.Expr {
-	return newProxy[dst.Expr](p.SendStmt.Value, p.placeholders)
-}
+func (p *proxySendStmt) Value() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxySliceExpr struct {
 	*dst.SliceExpr
 	placeholders *placeholders
 }
 
-func (p *proxySliceExpr) Copy() string {
-	return p.placeholders.forNode(p.SliceExpr, false)
-}
+func (p *proxySliceExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySliceExpr) String() string {
-	return p.placeholders.forNode(p.SliceExpr, true)
-}
+func (p *proxySliceExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySliceExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.SliceExpr.X, p.placeholders)
-}
+func (p *proxySliceExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxySliceExpr) Low() dst.Expr {
-	return newProxy[dst.Expr](p.SliceExpr.Low, p.placeholders)
-}
+func (p *proxySliceExpr) Low() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxySliceExpr) High() dst.Expr {
-	return newProxy[dst.Expr](p.SliceExpr.High, p.placeholders)
-}
+func (p *proxySliceExpr) High() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxySliceExpr) Max() dst.Expr {
-	return newProxy[dst.Expr](p.SliceExpr.Max, p.placeholders)
-}
+func (p *proxySliceExpr) Max() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyStarExpr struct {
 	*dst.StarExpr
 	placeholders *placeholders
 }
 
-func (p *proxyStarExpr) Copy() string {
-	return p.placeholders.forNode(p.StarExpr, false)
-}
+func (p *proxyStarExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyStarExpr) String() string {
-	return p.placeholders.forNode(p.StarExpr, true)
-}
+func (p *proxyStarExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyStarExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.StarExpr.X, p.placeholders)
-}
+func (p *proxyStarExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyStructType struct {
 	*dst.StructType
 	placeholders *placeholders
 }
 
-func (p *proxyStructType) Copy() string {
-	return p.placeholders.forNode(p.StructType, false)
-}
+func (p *proxyStructType) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyStructType) String() string {
-	return p.placeholders.forNode(p.StructType, true)
-}
+func (p *proxyStructType) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyStructType) Fields() *proxyFieldList {
-	return newProxy[*proxyFieldList](p.StructType.Fields, p.placeholders)
-}
+func (p *proxyStructType) Fields() *proxyFieldList { _ = "STUB: not implemented"; return nil }
 
 type proxySwitchStmt struct {
 	*dst.SwitchStmt
 	placeholders *placeholders
 }
 
-func (p *proxySwitchStmt) Copy() string {
-	return p.placeholders.forNode(p.SwitchStmt, false)
-}
+func (p *proxySwitchStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySwitchStmt) String() string {
-	return p.placeholders.forNode(p.SwitchStmt, true)
-}
+func (p *proxySwitchStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxySwitchStmt) Init() dst.Stmt {
-	return newProxy[dst.Stmt](p.SwitchStmt.Init, p.placeholders)
-}
+func (p *proxySwitchStmt) Init() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
-func (p *proxySwitchStmt) Tag() dst.Expr {
-	return newProxy[dst.Expr](p.SwitchStmt.Tag, p.placeholders)
-}
+func (p *proxySwitchStmt) Tag() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxySwitchStmt) Body() *proxyBlockStmt {
-	return newProxy[*proxyBlockStmt](p.SwitchStmt.Body, p.placeholders)
-}
+func (p *proxySwitchStmt) Body() *proxyBlockStmt { _ = "STUB: not implemented"; return nil }
 
 type proxyTypeAssertExpr struct {
 	*dst.TypeAssertExpr
 	placeholders *placeholders
 }
 
-func (p *proxyTypeAssertExpr) Copy() string {
-	return p.placeholders.forNode(p.TypeAssertExpr, false)
-}
+func (p *proxyTypeAssertExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyTypeAssertExpr) String() string {
-	return p.placeholders.forNode(p.TypeAssertExpr, true)
-}
+func (p *proxyTypeAssertExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyTypeAssertExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.TypeAssertExpr.X, p.placeholders)
-}
+func (p *proxyTypeAssertExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyTypeAssertExpr) Type() dst.Expr {
-	return newProxy[dst.Expr](p.TypeAssertExpr.Type, p.placeholders)
-}
+func (p *proxyTypeAssertExpr) Type() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyTypeSpec struct {
 	*dst.TypeSpec
 	placeholders *placeholders
 }
 
-func (p *proxyTypeSpec) Copy() string {
-	return p.placeholders.forNode(p.TypeSpec, false)
-}
+func (p *proxyTypeSpec) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyTypeSpec) String() string {
-	return p.placeholders.forNode(p.TypeSpec, true)
-}
+func (p *proxyTypeSpec) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyTypeSpec) Name() *proxyIdent {
-	return newProxy[*proxyIdent](p.TypeSpec.Name, p.placeholders)
-}
+func (p *proxyTypeSpec) Name() *proxyIdent { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyTypeSpec) TypeParams() *proxyFieldList {
-	return newProxy[*proxyFieldList](p.TypeSpec.TypeParams, p.placeholders)
-}
+func (p *proxyTypeSpec) TypeParams() *proxyFieldList { _ = "STUB: not implemented"; return nil }
 
-func (p *proxyTypeSpec) Type() dst.Expr {
-	return newProxy[dst.Expr](p.TypeSpec.Type, p.placeholders)
-}
+func (p *proxyTypeSpec) Type() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyTypeSwitchStmt struct {
 	*dst.TypeSwitchStmt
 	placeholders *placeholders
 }
 
-func (p *proxyTypeSwitchStmt) Copy() string {
-	return p.placeholders.forNode(p.TypeSwitchStmt, false)
-}
+func (p *proxyTypeSwitchStmt) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyTypeSwitchStmt) String() string {
-	return p.placeholders.forNode(p.TypeSwitchStmt, true)
-}
+func (p *proxyTypeSwitchStmt) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyTypeSwitchStmt) Init() dst.Stmt {
-	return newProxy[dst.Stmt](p.TypeSwitchStmt.Init, p.placeholders)
-}
+func (p *proxyTypeSwitchStmt) Init() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
-func (p *proxyTypeSwitchStmt) Assign() dst.Stmt {
-	return newProxy[dst.Stmt](p.TypeSwitchStmt.Assign, p.placeholders)
-}
+func (p *proxyTypeSwitchStmt) Assign() dst.Stmt { _ = "STUB: not implemented"; return *new(dst.Stmt) }
 
-func (p *proxyTypeSwitchStmt) Body() *proxyBlockStmt {
-	return newProxy[*proxyBlockStmt](p.TypeSwitchStmt.Body, p.placeholders)
-}
+func (p *proxyTypeSwitchStmt) Body() *proxyBlockStmt { _ = "STUB: not implemented"; return nil }
 
 type proxyUnaryExpr struct {
 	*dst.UnaryExpr
 	placeholders *placeholders
 }
 
-func (p *proxyUnaryExpr) Copy() string {
-	return p.placeholders.forNode(p.UnaryExpr, false)
-}
+func (p *proxyUnaryExpr) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyUnaryExpr) String() string {
-	return p.placeholders.forNode(p.UnaryExpr, true)
-}
+func (p *proxyUnaryExpr) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyUnaryExpr) X() dst.Expr {
-	return newProxy[dst.Expr](p.UnaryExpr.X, p.placeholders)
-}
+func (p *proxyUnaryExpr) X() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
 type proxyValueSpec struct {
 	*dst.ValueSpec
 	placeholders *placeholders
 }
 
-func (p *proxyValueSpec) Copy() string {
-	return p.placeholders.forNode(p.ValueSpec, false)
-}
+func (p *proxyValueSpec) Copy() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyValueSpec) String() string {
-	return p.placeholders.forNode(p.ValueSpec, true)
-}
+func (p *proxyValueSpec) String() string { _ = "STUB: not implemented"; return "" }
 
-func (p *proxyValueSpec) Type() dst.Expr {
-	return newProxy[dst.Expr](p.ValueSpec.Type, p.placeholders)
-}
+func (p *proxyValueSpec) Type() dst.Expr { _ = "STUB: not implemented"; return *new(dst.Expr) }
 
-func (p *proxyValueSpec) Values() []dst.Expr {
-	if p.ValueSpec.Values == nil {
-		return nil
-	}
-	res := make([]dst.Expr, len(p.ValueSpec.Values))
-	for i, node := range p.ValueSpec.Values {
-		res[i] = newProxy[dst.Expr](node, p.placeholders)
-	}
-	return res
-}
+func (p *proxyValueSpec) Values() []dst.Expr { _ = "STUB: not implemented"; return nil }
 
 func newProxy[T any](node any, placeholders *placeholders) T {
-	rv := node
-	switch node := node.(type) {
-	case *dst.ArrayType:
-		rv = &proxyArrayType{node, placeholders}
-	case *dst.AssignStmt:
-		rv = &proxyAssignStmt{node, placeholders}
-	case *dst.BadDecl:
-		rv = &proxyBadDecl{node, placeholders}
-	case *dst.BadExpr:
-		rv = &proxyBadExpr{node, placeholders}
-	case *dst.BadStmt:
-		rv = &proxyBadStmt{node, placeholders}
-	case *dst.BasicLit:
-		rv = &proxyBasicLit{node, placeholders}
-	case *dst.BinaryExpr:
-		rv = &proxyBinaryExpr{node, placeholders}
-	case *dst.BlockStmt:
-		rv = &proxyBlockStmt{node, placeholders}
-	case *dst.BranchStmt:
-		rv = &proxyBranchStmt{node, placeholders}
-	case *dst.CallExpr:
-		rv = &proxyCallExpr{node, placeholders}
-	case *dst.CaseClause:
-		rv = &proxyCaseClause{node, placeholders}
-	case *dst.ChanType:
-		rv = &proxyChanType{node, placeholders}
-	case *dst.CommClause:
-		rv = &proxyCommClause{node, placeholders}
-	case *dst.CompositeLit:
-		rv = &proxyCompositeLit{node, placeholders}
-	case *dst.DeclStmt:
-		rv = &proxyDeclStmt{node, placeholders}
-	case *dst.DeferStmt:
-		rv = &proxyDeferStmt{node, placeholders}
-	case *dst.Ellipsis:
-		rv = &proxyEllipsis{node, placeholders}
-	case *dst.EmptyStmt:
-		rv = &proxyEmptyStmt{node, placeholders}
-	case *dst.ExprStmt:
-		rv = &proxyExprStmt{node, placeholders}
-	case *dst.Field:
-		rv = &proxyField{node, placeholders}
-	case *dst.FieldList:
-		rv = &proxyFieldList{node, placeholders}
-	case *dst.File:
-		rv = &proxyFile{node, placeholders}
-	case *dst.ForStmt:
-		rv = &proxyForStmt{node, placeholders}
-	case *dst.FuncDecl:
-		rv = &proxyFuncDecl{node, placeholders}
-	case *dst.FuncLit:
-		rv = &proxyFuncLit{node, placeholders}
-	case *dst.FuncType:
-		rv = &proxyFuncType{node, placeholders}
-	case *dst.GenDecl:
-		rv = &proxyGenDecl{node, placeholders}
-	case *dst.GoStmt:
-		rv = &proxyGoStmt{node, placeholders}
-	case *dst.Ident:
-		rv = &proxyIdent{node, placeholders}
-	case *dst.IfStmt:
-		rv = &proxyIfStmt{node, placeholders}
-	case *dst.ImportSpec:
-		rv = &proxyImportSpec{node, placeholders}
-	case *dst.IncDecStmt:
-		rv = &proxyIncDecStmt{node, placeholders}
-	case *dst.IndexExpr:
-		rv = &proxyIndexExpr{node, placeholders}
-	case *dst.IndexListExpr:
-		rv = &proxyIndexListExpr{node, placeholders}
-	case *dst.InterfaceType:
-		rv = &proxyInterfaceType{node, placeholders}
-	case *dst.KeyValueExpr:
-		rv = &proxyKeyValueExpr{node, placeholders}
-	case *dst.LabeledStmt:
-		rv = &proxyLabeledStmt{node, placeholders}
-	case *dst.MapType:
-		rv = &proxyMapType{node, placeholders}
-	case *dst.Package:
-		rv = &proxyPackage{node, placeholders}
-	case *dst.ParenExpr:
-		rv = &proxyParenExpr{node, placeholders}
-	case *dst.RangeStmt:
-		rv = &proxyRangeStmt{node, placeholders}
-	case *dst.ReturnStmt:
-		rv = &proxyReturnStmt{node, placeholders}
-	case *dst.SelectStmt:
-		rv = &proxySelectStmt{node, placeholders}
-	case *dst.SelectorExpr:
-		rv = &proxySelectorExpr{node, placeholders}
-	case *dst.SendStmt:
-		rv = &proxySendStmt{node, placeholders}
-	case *dst.SliceExpr:
-		rv = &proxySliceExpr{node, placeholders}
-	case *dst.StarExpr:
-		rv = &proxyStarExpr{node, placeholders}
-	case *dst.StructType:
-		rv = &proxyStructType{node, placeholders}
-	case *dst.SwitchStmt:
-		rv = &proxySwitchStmt{node, placeholders}
-	case *dst.TypeAssertExpr:
-		rv = &proxyTypeAssertExpr{node, placeholders}
-	case *dst.TypeSpec:
-		rv = &proxyTypeSpec{node, placeholders}
-	case *dst.TypeSwitchStmt:
-		rv = &proxyTypeSwitchStmt{node, placeholders}
-	case *dst.UnaryExpr:
-		rv = &proxyUnaryExpr{node, placeholders}
-	case *dst.ValueSpec:
-		rv = &proxyValueSpec{node, placeholders}
-	}
-	return rv.(T)
+	_ = "STUB: not implemented"
+	return *new(T)
 }

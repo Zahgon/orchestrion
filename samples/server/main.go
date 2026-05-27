@@ -6,7 +6,6 @@
 package main
 
 import (
-	"io"
 	"log"
 	"net/http"
 )
@@ -21,30 +20,12 @@ func main() {
 }
 
 // myHandler comment on function
-func myHandler(w http.ResponseWriter, r *http.Request) {
-	b, err := io.ReadAll(r.Body)
-	// test comment in function
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
-	}
-	defer r.Body.Close()
-	w.WriteHeader(http.StatusOK)
-	w.Write(b)
-}
+func myHandler(w http.ResponseWriter, r *http.Request) { _ = "STUB: not implemented"; return }
 
-func instrumentedHandler(w http.ResponseWriter, r *http.Request) {
-	b, err := io.ReadAll(r.Body)
-	// test comment in function
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
-	}
-	defer r.Body.Close()
-	w.WriteHeader(http.StatusOK)
-	w.Write(b)
-}
+// test comment in function
+
+func instrumentedHandler(w http.ResponseWriter, r *http.Request) { _ = "STUB: not implemented"; return }
+
+// test comment in function
 
 // comment that is just hanging out unattached

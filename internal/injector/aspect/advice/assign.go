@@ -7,13 +7,11 @@ package advice
 
 import (
 	gocontext "context"
-	"fmt"
 
 	"github.com/DataDog/orchestrion/internal/fingerprint"
 	"github.com/DataDog/orchestrion/internal/injector/aspect/advice/code"
 	"github.com/DataDog/orchestrion/internal/injector/aspect/context"
 	"github.com/DataDog/orchestrion/internal/yaml"
-	"github.com/dave/dst"
 	"github.com/goccy/go-yaml/ast"
 )
 
@@ -21,38 +19,16 @@ type assignValue struct {
 	Template *code.Template
 }
 
-func AssignValue(template *code.Template) *assignValue {
-	return &assignValue{template}
-}
+func AssignValue(template *code.Template) *assignValue { _ = "STUB: not implemented"; return nil }
 
 func (a *assignValue) Apply(ctx context.AdviceContext) (bool, error) {
-	spec, ok := ctx.Node().(*dst.ValueSpec)
-	if !ok {
-		return false, fmt.Errorf("assign-value: expected *dst.ValueSpec, got %T", ctx.Node())
-	}
-
-	expr, err := a.Template.CompileExpression(ctx)
-	if err != nil {
-		return false, fmt.Errorf("assign-value: %w", err)
-	}
-
-	spec.Values = make([]dst.Expr, len(spec.Names))
-	for i := range spec.Values {
-		spec.Values[i], _ = dst.Clone(expr).(dst.Expr)
-	}
-
-	ctx.EnsureMinGoLang(a.Template.Lang)
-
-	return true, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
-func (a *assignValue) AddedImports() []string {
-	return a.Template.AddedImports()
-}
+func (a *assignValue) AddedImports() []string { _ = "STUB: not implemented"; return nil }
 
-func (a *assignValue) Hash(h *fingerprint.Hasher) error {
-	return h.Named("assign-value", a.Template)
-}
+func (a *assignValue) Hash(h *fingerprint.Hasher) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	unmarshalers["assign-value"] = func(ctx gocontext.Context, node ast.Node) (Advice, error) {
